@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
+import { Button } from "@mantine/core";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -18,7 +19,14 @@ function App() {
     ) {
       const fileListTemp: string[] = await invoke("get_file_list", {
         getDirPath: path,
+      
       });
+      const musicFiles = await invoke("get_music_file", {
+        fileList: fileListTemp,
+        baseDirPath:path
+
+      })
+      console.log({ musicFiles });
       console.log(fileListTemp);
       // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
       setFileList(fileListTemp);
@@ -30,14 +38,14 @@ function App() {
 
       <p>Hello woarld</p>
 
-      <button
+      <Button
         onClick={() => {
           getFileLists();
         }}
         type="submit"
       >
         fileList
-      </button>
+      </Button>
     </div>
   );
 }
