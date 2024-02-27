@@ -13,9 +13,7 @@ function App() {
   async function getFileLists(
     path: string = "C:\\Users\\mochi\\Downloads\\105f5 (Shelter - ETAN)",
   ) {
-    const fileListTemp: string[] = await invoke("get_file_list", {
-      getDirPath: path,
-    });
+    const fileListTemp: string[] = await invoke("get_bs_music_files");
     const musicFiles: string[] = await invoke("get_music_file", {
       fileList: fileListTemp,
       baseDirPath: path,
