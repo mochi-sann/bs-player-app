@@ -3,3 +3,5 @@ export type SongDataType = {
   music_name: string;
   music_dir: string;
 };
+
+export type selectListOptionType = { value: string; label: string };

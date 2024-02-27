@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
-import { Button } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import { useAtom } from "jotai";
 import { MusicFileListAtom } from "./lib/jotai/jotai";
 import { MusicPlayer } from "./Components/MusicPlayer";
@@ -23,7 +23,8 @@ function App() {
     <div className="container">
       {/* <pre>{JSON.stringify({  musickFileList }, null, 2)}</pre> */}
 
-      <p>Hello woarld</p>
+      <Title order={1}>Beat Saber Custom map player</Title>
+
       {musickFileList.length > 0 && <MusicPlayer />}
 
       <Button
