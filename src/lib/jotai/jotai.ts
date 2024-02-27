@@ -1,2 +1,4 @@
 import { atom } from "jotai";
-export const MusicFileListAtom = atom<string[]>([]);
+import { SongDataType } from "../types";
+
+export const MusicFileListAtom = atom<SongDataType[]>([]);
