@@ -17,12 +17,18 @@ dependencies:
   "@tauri-apps/api":
     specifier: ^1
     version: 1.5.3
+  jotai:
+    specifier: ^2.6.5
+    version: 2.6.5(@types/react@18.2.59)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-player:
+    specifier: ^2.14.1
+    version: 2.14.1(react@18.2.0)
 
 devDependencies:
   "@tauri-apps/cli":
@@ -1419,6 +1425,14 @@ packages:
       ms: 2.1.2
     dev: true
 
+  /deepmerge@4.3.1:
+    resolution:
+      {
+        integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==,
+      }
+    engines: { node: ">=0.10.0" }
+    dev: false
+
   /detect-node-es@1.1.0:
     resolution:
       {
@@ -1709,6 +1723,25 @@ packages:
       }
     dev: true
 
+  /jotai@2.6.5(@types/react@18.2.59)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-T+yvY42GXKomvJYqs+NeTH0da9Z1tQ3Qk3zppPHIWnvmOBKpN6Qd4j8h/oo9dwxs3w/Z5r6Kk0I8h6z5orQ/HQ==,
+      }
+    engines: { node: ">=12.20.0" }
+    peerDependencies:
+      "@types/react": ">=17.0.0"
+      react: ">=17.0.0"
+    peerDependenciesMeta:
+      "@types/react":
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      "@types/react": 18.2.59
+      react: 18.2.0
+    dev: false
+
   /js-tokens@4.0.0:
     resolution:
       {
@@ -1786,6 +1819,13 @@ packages:
       wrap-ansi: 9.0.0
     dev: true
 
+  /load-script@1.0.0:
+    resolution:
+      {
+        integrity: sha512-kPEjMFtZvwL9TaZo0uZ2ml+Ye9HUMmPwbYRJ324qF9tqMejwykJ5ggTyvzmrbBeapCAbk98BSbTeovHEEP1uCA==,
+      }
+    dev: false
+
   /log-update@6.0.0:
     resolution:
       {
@@ -1818,6 +1858,13 @@ packages:
     dependencies:
       yallist: 3.1.1
     dev: true
+
+  /memoize-one@5.2.1:
+    resolution:
+      {
+        integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==,
+      }
+    dev: false
 
   /merge-stream@2.0.0:
     resolution:
@@ -2092,6 +2139,13 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-fast-compare@3.2.2:
+    resolution:
+      {
+        integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==,
+      }
+    dev: false
+
   /react-is@16.13.1:
     resolution:
       {
@@ -2111,6 +2165,22 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-player@2.14.1(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-jILj7F9o+6NHzrJ1GqZIxfJgskvGmKeJ05FNhPvgiCpvMZFmFneKEkukywHcULDO2lqITm+zcEkLSq42mX0FbA==,
+      }
+    peerDependencies:
+      react: ">=16.6.0"
+    dependencies:
+      deepmerge: 4.3.1
+      load-script: 1.0.0
+      memoize-one: 5.2.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-fast-compare: 3.2.2
     dev: false
 
   /react-refresh@0.14.0:

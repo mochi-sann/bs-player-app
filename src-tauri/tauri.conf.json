@@ -11,13 +11,20 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "fs": {
+        "all": true
+      },
+      "path": {
         "all": true
       },
       "shell": {
         "all": false,
         "open": true
+      },
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
       }
     },
     "windows": [
@@ -33,7 +40,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.mochi33.bsm-player-app",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

@@ -2,6 +2,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::fs;
+mod get_musc_files;
+use get_musc_files::get_bs_music_files;
+
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -40,7 +43,7 @@ fn get_music_file(file_list: Vec<String> , base_dir_path : String) -> Vec<String
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, get_file_list,  get_music_file]) 
+        .invoke_handler(tauri::generate_handler![greet, get_file_list,  get_music_file , get_bs_music_files]) 
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
