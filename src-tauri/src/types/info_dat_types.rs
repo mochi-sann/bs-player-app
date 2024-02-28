@@ -1,13 +1,14 @@
-use std::{error::Error, path::Path};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
+use std::{error::Error, path::Path};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use ts_rs::TS;
 
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct BsInfoDat {
     #[serde(rename = "_version")]
@@ -40,16 +41,22 @@ pub struct BsInfoDat {
     pub all_directions_environment_name: String,
     #[serde(rename = "_songTimeOffset")]
     pub song_time_offset: i64,
+    #[serde(rename = "_customData")]
+    pub custom_data: CustomData,
+    #[serde(rename = "_difficultyBeatmapSets")]
+    pub difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct CustomData {
     #[serde(rename = "_editors")]
     pub editors: Editors,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct Editors {
     #[serde(rename = "_lastEditedBy")]
@@ -60,19 +67,22 @@ pub struct Editors {
     pub chro_mapper: ChroMapper,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct Mma2 {
     pub version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct ChroMapper {
     pub version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct DifficultyBeatmapSet {
     #[serde(rename = "_beatmapCharacteristicName")]
@@ -81,7 +91,8 @@ pub struct DifficultyBeatmapSet {
     pub difficulty_beatmaps: Vec<DifficultyBeatmap>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct DifficultyBeatmap {
     #[serde(rename = "_difficulty")]
@@ -98,7 +109,8 @@ pub struct DifficultyBeatmap {
     pub custom_data: CustomData2,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct CustomData2 {
     #[serde(rename = "_editorOffset")]
@@ -113,7 +125,8 @@ pub struct CustomData2 {
     pub color_left: ColorLeft,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct ColorRight {
     pub r: f64,
@@ -121,14 +134,14 @@ pub struct ColorRight {
     pub b: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub struct ColorLeft {
     pub r: i64,
     pub g: f64,
     pub b: f64,
 }
-
 
 pub fn load_book_from_json_file<P: AsRef<Path>>(path: P) -> Result<Value, Box<dyn Error>> {
     let file = File::open(path.as_ref())?; // std::io::Error の可能性

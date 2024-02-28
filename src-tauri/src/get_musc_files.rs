@@ -8,19 +8,25 @@ use std::{
 
 use serde::Serialize;
 use serde_json::Value;
+use ts_rs::TS;
 
-use crate::{get_music_file, types::info_dat_types::{load_book_from_json_file, BsInfoDat}};
+use crate::{
+    get_music_file,
+    types::info_dat_types::{load_book_from_json_file, BsInfoDat},
+};
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize , TS)]
+#[ts(export)]
 pub struct SongData {
     music_file: String,
     music_name: String,
     music_dir: String,
-    mapper: String , 
-    auther : String ,
-    image : String,
+    mapper: String,
+    auther: String,
+    image: String,
 }
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize ,TS)]
+#[ts(export)]
 pub struct SongInfoDat {
     song_name: String,
     song_auther: String,
@@ -114,25 +120,39 @@ impl MusicFile {
             let music_file_list = self.filter_music_files(files_paths);
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let musicfile_file_path = PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
+                    let musicfile_file_path =
+                        PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
                     let full_music_file_path = path.join(musicfile_file_path);
-                    let full_music_image_path = path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
+                    let full_music_image_path =
+                        path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
                     println!("info_dat : {:?}", full_music_file_path);
 
                     let song_data_temp = SongData {
                         music_file: full_music_file_path.to_str().unwrap().to_string(),
-                        music_name: info_dat["_songName"].as_str().unwrap_or_default().to_string(),
+                        music_name: info_dat["_songName"]
+                            .as_str()
+                            .unwrap_or_default()
+                            .to_string(),
                         music_dir: path.to_str().unwrap().to_string(),
-                        auther: info_dat["_songAuthorName"].as_str().unwrap_or_default().to_string(),
-                        mapper: info_dat["_levelAuthorName"].as_str().unwrap_or_default().to_string(),
+                        auther: info_dat["_songAuthorName"]
+                            .as_str()
+                            .unwrap_or_default()
+                            .to_string(),
+                        mapper: info_dat["_levelAuthorName"]
+                            .as_str()
+                            .unwrap_or_default()
+                            .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
                     };
                     file_list.push(song_data_temp);
                 }
                 Err(err) => {
-                    eprintln!("path : {:?} , JSON ファイルの読み込みに失敗しました: {:?} ", path.to_str(), err);
+                    eprintln!(
+                        "path : {:?} , JSON ファイルの読み込みに失敗しました: {:?} ",
+                        path.to_str(),
+                        err
+                    );
                 }
-                
             }
         }
         println!("file_list : {:?}", file_list);
