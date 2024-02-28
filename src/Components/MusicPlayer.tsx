@@ -3,8 +3,7 @@ import { useAtom } from "jotai";
 import { MusicFileListAtom } from "../lib/jotai/jotai";
 import ReactPlayer from "react-player";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { homeDir, join } from "@tauri-apps/api/path";
-import { ComboboxData } from "@mantine/core";
+import { join } from "@tauri-apps/api/path";
 import Select from "react-select";
 import { selectListOptionType } from "../lib/types";
 
@@ -23,13 +22,9 @@ export const MusicPlayer = () => {
       return { value: audio.music_file, label: audio.music_name };
     },
   );
-  function hoge(test: Option) {
-    console.log({ test });
-  }
 
   useEffect(() => {
     const fn = async () => {
-      const baseDir = await homeDir();
       const new_url = convertFileSrc(await join(AudioUrl));
       const player = (
         <ReactPlayer url={new_url} playing={playing} controls={true} />
@@ -51,7 +46,7 @@ export const MusicPlayer = () => {
 
   return (
     <div>
-      {/* <button onClick={toggle}>{playing ? "Pause" : "Play"}</button> */}
+      <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
       {AudioUrl}
       <Select
         onChange={(e) => setAudioUrl(e?.value || "")}

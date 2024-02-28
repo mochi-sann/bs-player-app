@@ -3,6 +3,7 @@
 
 use std::fs;
 mod get_musc_files;
+mod types;
 use get_musc_files::get_bs_music_files;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
