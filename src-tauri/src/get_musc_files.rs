@@ -17,7 +17,8 @@ pub struct SongData {
     music_name: String,
     music_dir: String,
     mapper: String , 
-    Auther : String ,
+    auther : String ,
+    image : String,
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct SongInfoDat {
@@ -113,15 +114,18 @@ impl MusicFile {
             let music_file_list = self.filter_music_files(files_paths);
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let musicfile_file_path = PathBuf::from( info_dat["_songFilename"].as_str().unwrap_or_default());
+                    let musicfile_file_path = PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
                     let full_music_file_path = path.join(musicfile_file_path);
+                    let full_music_image_path = path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
                     println!("info_dat : {:?}", full_music_file_path);
+
                     let song_data_temp = SongData {
                         music_file: full_music_file_path.to_str().unwrap().to_string(),
                         music_name: info_dat["_songName"].as_str().unwrap_or_default().to_string(),
                         music_dir: path.to_str().unwrap().to_string(),
-                        Auther : info_dat["_songAuthorName"].as_str().unwrap_or_default().to_string(),
-                        mapper : info_dat["_levelAuthorName"].as_str().unwrap_or_default().to_string(),
+                        auther: info_dat["_songAuthorName"].as_str().unwrap_or_default().to_string(),
+                        mapper: info_dat["_levelAuthorName"].as_str().unwrap_or_default().to_string(),
+                        image: full_music_image_path.to_str().unwrap().to_string(),
                     };
                     file_list.push(song_data_temp);
                 }
