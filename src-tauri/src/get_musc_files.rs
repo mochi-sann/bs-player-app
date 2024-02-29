@@ -1,9 +1,6 @@
 use std::{
-    error::Error,
     fs::{self, ReadDir},
-    num::ParseIntError,
     path::PathBuf,
-    string,
 };
 
 use serde::Serialize;
@@ -11,11 +8,10 @@ use serde_json::Value;
 use ts_rs::TS;
 
 use crate::{
-    get_music_file,
-    types::info_dat_types::{load_book_from_json_file, BsInfoDat},
+    types::info_dat_types::{load_book_from_json_file},
 };
 
-#[derive(Debug, Clone, Serialize , TS)]
+#[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
 pub struct SongData {
     music_file: String,
@@ -25,7 +21,7 @@ pub struct SongData {
     auther: String,
     image: String,
 }
-#[derive(Debug, Clone, Serialize ,TS)]
+#[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
 pub struct SongInfoDat {
     song_name: String,
@@ -116,7 +112,7 @@ impl MusicFile {
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
         for path in paths {
-            let files_paths = fs::read_dir(path.clone()).unwrap();
+            let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
                     let musicfile_file_path =
@@ -165,7 +161,7 @@ pub fn get_bs_music_files() -> Vec<SongData> {
         "C:\\Users\\mochi\\BSManager\\SharedContent\\SharedMaps\\CustomLevels".to_string();
     let file_list = MusicFile::new(get_dir_path);
 
-    let return_resutl = &file_list.music_files;
+    let _return_resutl = &file_list.music_files;
     let music_data = file_list.get_song_datas();
     music_data
 }

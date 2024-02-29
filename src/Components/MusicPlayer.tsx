@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { MusicFileListAtom } from "../lib/jotai/jotai";
 import ReactPlayer from "react-player";

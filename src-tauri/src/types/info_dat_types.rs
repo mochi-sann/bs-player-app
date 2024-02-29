@@ -41,7 +41,7 @@ pub struct BsInfoDat {
     #[serde(rename = "_songTimeOffset")]
     pub song_time_offset: i64,
     #[serde(rename = "_customData")]
-    pub custom_data:Option<CustomData> ,
+    pub custom_data: Option<CustomData>,
     #[serde(rename = "_difficultyBeatmapSets")]
     pub difficulty_beatmap_sets: Option<Vec<DifficultyBeatmapSet>>,
 }
