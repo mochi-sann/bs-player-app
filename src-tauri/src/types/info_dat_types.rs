@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::BufReader;
-use std::path::PathBuf;
 use std::{error::Error, path::Path};
 
 use serde::{Deserialize, Serialize};
@@ -42,9 +41,9 @@ pub struct BsInfoDat {
     #[serde(rename = "_songTimeOffset")]
     pub song_time_offset: i64,
     #[serde(rename = "_customData")]
-    pub custom_data: CustomData,
+    pub custom_data:Option<CustomData> ,
     #[serde(rename = "_difficultyBeatmapSets")]
-    pub difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
+    pub difficulty_beatmap_sets: Option<Vec<DifficultyBeatmapSet>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TS)]

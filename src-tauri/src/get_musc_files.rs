@@ -117,7 +117,6 @@ impl MusicFile {
         let paths = self.get_music_dirs();
         for path in paths {
             let files_paths = fs::read_dir(path.clone()).unwrap();
-            let music_file_list = self.filter_music_files(files_paths);
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
                     let musicfile_file_path =

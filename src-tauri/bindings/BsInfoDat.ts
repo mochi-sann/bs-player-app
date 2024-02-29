@@ -18,6 +18,6 @@ export interface BsInfoDat {
   _environmentName: string;
   _allDirectionsEnvironmentName: string;
   _songTimeOffset: bigint;
-  _customData: CustomData;
-  _difficultyBeatmapSets: Array<DifficultyBeatmapSet>;
+  _customData: CustomData | null;
+  _difficultyBeatmapSets: Array<DifficultyBeatmapSet> | null;
 }

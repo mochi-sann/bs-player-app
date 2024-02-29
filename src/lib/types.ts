@@ -8,4 +8,4 @@ import { SongData } from "../../src-tauri/bindings/SongData";
 
 export type SongDataType = SongData;
 
-export type selectListOptionType = { value: string; label: string };
+export type selectListOptionType = { value: SongData; label: string };
