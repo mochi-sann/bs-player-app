@@ -7,9 +7,7 @@ use serde::Serialize;
 use serde_json::Value;
 use ts_rs::TS;
 
-use crate::{
-    types::info_dat_types::{load_book_from_json_file},
-};
+use crate::types::info_dat_types::load_book_from_json_file;
 
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
