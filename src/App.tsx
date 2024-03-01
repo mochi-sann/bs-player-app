@@ -5,12 +5,13 @@ import { useAtom } from "jotai";
 import { MusicFileListAtom } from "./lib/jotai/jotai";
 import { MusicPlayer } from "./Components/MusicPlayer";
 import { SongDataType } from "./lib/types";
-import { useAppInit } from "./hooks/appInitHook";
-import { useQuery } from "@tanstack/react-query";
-import { atomWithSuspenseQuery } from "jotai-tanstack-query";
+import { useTranslation } from "react-i18next";
+import { ChangeLang } from "./Components/ChangeLang";
 
 function App() {
   const [musickFileList, setMusickFileList] = useAtom(MusicFileListAtom);
+
+  const { t } = useTranslation();
 
   async function getFileLists() {
     const fileListTemp: SongDataType[] = await invoke("get_bs_music_files");
@@ -23,9 +24,10 @@ function App() {
     <div className="container">
       {/* <pre>{JSON.stringify({  musickFileList }, null, 2)}</pre> */}
       <div>
-        <Title order={1}>Beat Saber Custom map player</Title>
+        <Title order={1}>{t("appName")}</Title>
 
         {musickFileList.length > 0 && <MusicPlayer />}
+        <ChangeLang />
 
         <Button
           onClick={() => {

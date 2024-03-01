@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Button } from "@mantine/core";
 import { SongData } from "../../../src-tauri/bindings/SongData";
 
 type MusicListProps = {
@@ -8,7 +8,9 @@ export const MusicList = (props: MusicListProps) => {
   return (
     <div>
       {props.MusicList.map((music) => (
-        <Box></Box>
+        <Box>
+          <Button>play</Button>
+        </Box>
       ))}
       <pre>{JSON.stringify(props.MusicList, null, 2)}</pre>
     </div>
