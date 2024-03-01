@@ -8,7 +8,7 @@ const en: Translations = {
   appName: "BS player app",
   SELECTED_LOCALE: "English",
   CHOOSE_LOCALE: "Choose a language",
-  HI: "Hi {name}!",
+  HI: "Hi {name}!" as `${string}{name}${string}`, // Update the type of HI property
 } satisfies BaseTranslation;
 
 export default en;

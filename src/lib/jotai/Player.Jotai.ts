@@ -1,5 +1,5 @@
-import { atom } from "jotai";
 import { SongDataType } from "../types";
+import { atom } from "jotai";
 
 export type PlayerStateAtomType = {
   isPlaying: boolean;

@@ -1,22 +1,18 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
-import { useAtom } from "jotai";
-import { MusicFileListAtom } from "./lib/jotai/jotai";
-import { MusicPlayer } from "./Components/MusicPlayer";
-import { detectLocale } from "./i18n/i18n-util";
-import {
-  localStorageDetector,
-  navigatorDetector,
-} from "typesafe-i18n/detectors";
 import { useEffect, useState } from "react";
-import TypesafeI18n, { useI18nContext } from "./i18n/i18n-react";
-import { loadLocaleAsync } from "./i18n/i18n-util.async";
+import "./App.css";
+import { MusicPlayer } from "./Components/MusicPlayer";
 import { TitileNavBar } from "./Components/TitileNavBar";
-import { Child } from "@tauri-apps/api/shell";
+import TypesafeI18n from "./i18n/i18n-react";
+import { detectLocale } from "./i18n/i18n-util";
+import { loadLocaleAsync } from "./i18n/i18n-util.async";
+import { MusicFileListAtom } from "./lib/jotai/jotai";
+import { useAtom } from "jotai";
+import { localStorageDetector } from "typesafe-i18n/detectors";
+
 const detectedLocale = detectLocale(localStorageDetector);
 
 function App() {
-  const [musickFileList, setMusickFileList] = useAtom(MusicFileListAtom);
+  const [musickFileList] = useAtom(MusicFileListAtom);
 
   const [wasLoaded, setWasLoaded] = useState(false);
 

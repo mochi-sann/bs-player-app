@@ -3,7 +3,6 @@
 //   music_name: string;
 //   music_dir: string;
 // };
-
 import { SongData } from "../../src-tauri/bindings/SongData";
 
 export type SongDataType = SongData;

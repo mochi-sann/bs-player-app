@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useAtom } from "jotai";
-import { MusicFileListAtom, MusicFileListAtomAsync } from "../lib/jotai/jotai";
-import ReactPlayer from "react-player";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { join } from "@tauri-apps/api/path";
-import Select from "react-select";
+import { SongData } from "../../src-tauri/bindings/SongData";
+import { MusicFileListAtom } from "../lib/jotai/jotai";
 import { selectListOptionType } from "../lib/types";
 import { Image } from "@mantine/core";
-import { SongData } from "../../src-tauri/bindings/SongData";
 import { useQuery } from "@tanstack/react-query";
+import { join } from "@tauri-apps/api/path";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { useAtom } from "jotai";
+import ReactPlayer from "react-player";
+import Select from "react-select";
 
 export const MusicPlayer = () => {
   const [playing, setPlaying] = useState(false);

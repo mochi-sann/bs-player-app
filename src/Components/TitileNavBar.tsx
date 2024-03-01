@@ -1,14 +1,12 @@
-import { Button, Title } from "@mantine/core";
-import { useI18nContext } from "../i18n/i18n-react";
-import { useTranslation } from "react-i18next";
 import { ChangeEventHandler } from "react";
+import { useI18nContext } from "../i18n/i18n-react";
 import { Locales } from "../i18n/i18n-types";
-import { loadLocaleAsync } from "../i18n/i18n-util.async";
 import { locales } from "../i18n/i18n-util";
+import { loadLocaleAsync } from "../i18n/i18n-util.async";
+import { Button, Title } from "@mantine/core";
 
 export const TitileNavBar = () => {
   const { LL, setLocale, locale } = useI18nContext();
-  const [t, i18n] = useTranslation();
   const onLocaleSelected: ChangeEventHandler<HTMLSelectElement> = async ({
     target,
   }) => {

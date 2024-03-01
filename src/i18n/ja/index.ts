@@ -8,7 +8,7 @@ const ja: Translations = {
     langName: "日本語",
   },
   appName: "BS プレイヤーアプリ",
-  HI: "こんにちは! {name}!",
+  HI: "こんにちは! {name}!" as `${string}{name}${string}`,
 } satisfies BaseTranslation;
 
 export default ja;

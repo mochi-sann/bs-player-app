@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { MusicList } from "../Components/views/MusicList";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
   title: "views/MusicList",

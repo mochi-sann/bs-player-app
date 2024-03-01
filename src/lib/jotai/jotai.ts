@@ -1,7 +1,6 @@
-import { atom } from "jotai";
 import { SongDataType } from "../types";
-import { atomWithObservable } from "jotai/utils";
 import { invoke } from "@tauri-apps/api";
+import { atom } from "jotai";
 import { atomWithSuspenseQuery } from "jotai-tanstack-query";
 
 export const MusicFileListAtom = atom<SongDataType[]>([]);
