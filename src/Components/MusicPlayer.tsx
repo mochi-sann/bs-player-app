@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAtom } from "jotai";
-import { MusicFileListAtom } from "../lib/jotai/jotai";
+import { MusicFileListAtom, MusicFileListAtomAsync } from "../lib/jotai/jotai";
 import ReactPlayer from "react-player";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { join } from "@tauri-apps/api/path";

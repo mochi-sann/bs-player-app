@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src-tauri/bindings"],
+  "include": ["src", "src-tauri/bindings", ".storybook"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

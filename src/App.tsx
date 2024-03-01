@@ -5,6 +5,9 @@ import { useAtom } from "jotai";
 import { MusicFileListAtom } from "./lib/jotai/jotai";
 import { MusicPlayer } from "./Components/MusicPlayer";
 import { SongDataType } from "./lib/types";
+import { useAppInit } from "./hooks/appInitHook";
+import { useQuery } from "@tanstack/react-query";
+import { atomWithSuspenseQuery } from "jotai-tanstack-query";
 
 function App() {
   const [musickFileList, setMusickFileList] = useAtom(MusicFileListAtom);
@@ -19,19 +22,20 @@ function App() {
   return (
     <div className="container">
       {/* <pre>{JSON.stringify({  musickFileList }, null, 2)}</pre> */}
+      <div>
+        <Title order={1}>Beat Saber Custom map player</Title>
 
-      <Title order={1}>Beat Saber Custom map player</Title>
+        {musickFileList.length > 0 && <MusicPlayer />}
 
-      {musickFileList.length > 0 && <MusicPlayer />}
-
-      <Button
-        onClick={() => {
-          getFileLists();
-        }}
-        type="submit"
-      >
-        fileList
-      </Button>
+        <Button
+          onClick={() => {
+            getFileLists();
+          }}
+          type="submit"
+        >
+          fileList
+        </Button>
+      </div>
     </div>
   );
 }
