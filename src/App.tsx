@@ -1,44 +1,39 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
-import { Button, Title } from "@mantine/core";
 import { useAtom } from "jotai";
 import { MusicFileListAtom } from "./lib/jotai/jotai";
 import { MusicPlayer } from "./Components/MusicPlayer";
-import { SongDataType } from "./lib/types";
-import { useTranslation } from "react-i18next";
-import { ChangeLang } from "./Components/ChangeLang";
+import { detectLocale } from "./i18n/i18n-util";
+import {
+  localStorageDetector,
+  navigatorDetector,
+} from "typesafe-i18n/detectors";
+import { useEffect, useState } from "react";
+import TypesafeI18n, { useI18nContext } from "./i18n/i18n-react";
+import { loadLocaleAsync } from "./i18n/i18n-util.async";
+import { TitileNavBar } from "./Components/TitileNavBar";
+import { Child } from "@tauri-apps/api/shell";
+const detectedLocale = detectLocale(localStorageDetector);
 
 function App() {
   const [musickFileList, setMusickFileList] = useAtom(MusicFileListAtom);
 
-  const { t } = useTranslation();
+  const [wasLoaded, setWasLoaded] = useState(false);
 
-  async function getFileLists() {
-    const fileListTemp: SongDataType[] = await invoke("get_bs_music_files");
+  useEffect(() => {
+    loadLocaleAsync(detectedLocale).then(() => setWasLoaded(true));
+  }, []);
 
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setMusickFileList(fileListTemp);
-  }
+  if (!wasLoaded) return null;
 
   return (
-    <div className="container">
-      {/* <pre>{JSON.stringify({  musickFileList }, null, 2)}</pre> */}
-      <div>
-        <Title order={1}>{t("appName")}</Title>
-
-        {musickFileList.length > 0 && <MusicPlayer />}
-        <ChangeLang />
-
-        <Button
-          onClick={() => {
-            getFileLists();
-          }}
-          type="submit"
-        >
-          fileList
-        </Button>
+    <TypesafeI18n locale={detectedLocale}>
+      <div className="container">
+        <TitileNavBar />
+        {/* <pre>{JSON.stringify({  musickFileList }, null, 2)}</pre> */}
+        <div>{musickFileList.length > 0 && <MusicPlayer />}</div>
       </div>
-    </div>
+    </TypesafeI18n>
   );
 }
 
