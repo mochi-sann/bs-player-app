@@ -54,19 +54,19 @@ impl MusicFile {
         file_list
     }
     // bs のCustomLevelsのフォルダをから音楽ファイルを取得する
-    fn get_music_dirs_files(&self) -> Vec<String> {
+    fn _get_music_dirs_files(&self) -> Vec<String> {
         let mut file_list: Vec<String> = Vec::new();
         let paths = self.get_music_dirs();
         println!("paths : {:?}", paths);
         for path in paths {
             let files_paths = fs::read_dir(path).unwrap();
-            let music_file_list = self.filter_music_files(files_paths);
+            let music_file_list = self._filter_music_files(files_paths);
             file_list.extend(music_file_list);
         }
         println!("file_list : {:?}", file_list);
         file_list
     }
-    fn filter_music_files(&self, file: ReadDir) -> Vec<String> {
+    fn _filter_music_files(&self, file: ReadDir) -> Vec<String> {
         let mut music_file_list: Vec<String> = Vec::new();
 
         for file in file {
