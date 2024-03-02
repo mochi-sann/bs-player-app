@@ -1,7 +1,7 @@
 import { SongData } from "../../../src-tauri/bindings/SongData";
 import { F7PlayFill } from "../icons/F7PlayFill";
 import { Fa6RegularImage } from "../icons/Fa6RegularImage";
-import { ActionIcon, Avatar, Flex, Text } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Flex, Text } from "@mantine/core";
 
 function formatSeconds(seconds: number) {
   let minutes = Math.floor(seconds / 60);
@@ -42,28 +42,34 @@ export const MusicItem = (props: MusicItemProps) => {
           {props.MusicItem.auther}
         </Text>
       </Flex>
-      <Text
-        style={{
-          color: "white",
-          fontSize: 12,
-          fontFamily: "Inter",
-          fontWeight: "300",
-          wordWrap: "break-word",
-        }}
-      >
-        {props.MusicItem.mapper}
-      </Text>
-      <Text
-        style={{
-          color: "white",
-          fontSize: 12,
-          fontFamily: "Inter",
-          fontWeight: "300",
-          wordWrap: "break-word",
-        }}
-      >
-        {formatSeconds(props.MusicItem.length_of_music)}
-      </Text>
+      <Flex justify={"end"} flex={1} gap={50}>
+        <Box>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 12,
+              fontFamily: "Inter",
+              fontWeight: "300",
+              wordWrap: "break-word",
+            }}
+          >
+            {props.MusicItem.mapper}
+          </Text>
+        </Box>
+        <Box>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 12,
+              fontFamily: "Inter",
+              fontWeight: "300",
+              wordWrap: "break-word",
+            }}
+          >
+            {formatSeconds(props.MusicItem.length_of_music)}
+          </Text>
+        </Box>
+      </Flex>
     </Flex>
   );
 };

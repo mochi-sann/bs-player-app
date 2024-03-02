@@ -1,18 +1,20 @@
+import React from "react";
 import { SongData } from "../../../src-tauri/bindings/SongData";
-import { Box, Button } from "@mantine/core";
+import { MusicItem } from "./MusicItem";
+import { Box, Button, Divider, Flex, Stack } from "@mantine/core";
 
 type MusicListProps = {
   MusicList: SongData[];
 };
 export const MusicList = (props: MusicListProps) => {
   return (
-    <div>
-      {props.MusicList.map((music) => (
-        <Box>
-          <Button>{JSON.stringify(music, null, 2)}</Button>
-        </Box>
+    <Flex direction={"column"}>
+      {props.MusicList.map((music, key) => (
+        <React.Fragment key={key}>
+          <MusicItem MusicItem={music} key={key} />
+          {key < props.MusicList.length - 1 && <Divider />}
+        </React.Fragment>
       ))}
-      <pre>{JSON.stringify(props.MusicList, null, 2)}</pre>
-    </div>
+    </Flex>
   );
 };
