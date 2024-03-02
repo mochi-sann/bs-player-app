@@ -1,4 +1,4 @@
-import { MusicList } from "../Components/views/MusicList";
+import { MusicList } from "../MusicList";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
@@ -20,11 +20,12 @@ export const Main: Story = {
     MusicList: [
       {
         auther: "auther",
-        image: "image",
+        image: "https://picsum.photos/200",
         mapper: "mapper",
         music_dir: "music_dir",
         music_file: "music_file",
         music_name: "music_name",
+        length_of_music: 503,
       },
     ],
   },

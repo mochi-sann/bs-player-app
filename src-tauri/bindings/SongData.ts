@@ -7,4 +7,5 @@ export interface SongData {
   mapper: string;
   auther: string;
   image: string;
+  length_of_music: number;
 }

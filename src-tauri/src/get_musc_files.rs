@@ -18,6 +18,7 @@ pub struct SongData {
     mapper: String,
     auther: String,
     image: String,
+    length_of_music: i32,
 }
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
@@ -136,6 +137,8 @@ impl MusicFile {
                             .unwrap_or_default()
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
+                        length_of_music: info_dat["_songTimeOffset"].as_i64().unwrap_or_default()
+                            as i32,
                     };
                     file_list.push(song_data_temp);
                 }
