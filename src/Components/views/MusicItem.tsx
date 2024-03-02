@@ -2,6 +2,7 @@ import { SongData } from "../../../src-tauri/bindings/SongData";
 import { F7PlayFill } from "../icons/F7PlayFill";
 import { Fa6RegularImage } from "../icons/Fa6RegularImage";
 import { ActionIcon, Avatar, Box, Flex, Text } from "@mantine/core";
+import { useHover } from "@mantine/hooks";
 
 function formatSeconds(seconds: number) {
   let minutes = Math.floor(seconds / 60);
@@ -10,10 +11,14 @@ function formatSeconds(seconds: number) {
 }
 type MusicItemProps = {
   MusicItem: SongData;
+  id: number;
 };
 export const MusicItem = (props: MusicItemProps) => {
+  const { hovered, ref } = useHover();
+
   return (
     <Flex
+      ref={ref}
       p={12}
       gap={20}
       justify="flex-start"
@@ -22,9 +27,15 @@ export const MusicItem = (props: MusicItemProps) => {
       wrap="wrap"
       flex={"1"}
     >
-      <ActionIcon variant="subtle" color="gray">
-        <F7PlayFill height={32} width={32} />
-      </ActionIcon>
+      <Flex w={"24px"} justify={"center"}>
+        {hovered ? (
+          <ActionIcon variant="subtle" color="gray">
+            <F7PlayFill height={32} width={32} />
+          </ActionIcon>
+        ) : (
+          <Text style={{ color: "white" }}>{props.id + 1}</Text>
+        )}
+      </Flex>
       <Avatar
         src={props.MusicItem.image}
         variant="filled"
@@ -56,7 +67,7 @@ export const MusicItem = (props: MusicItemProps) => {
             {props.MusicItem.mapper}
           </Text>
         </Box>
-        <Box>
+        <Flex justify={"end"} w={100}>
           <Text
             style={{
               color: "white",
@@ -68,7 +79,7 @@ export const MusicItem = (props: MusicItemProps) => {
           >
             {formatSeconds(props.MusicItem.length_of_music)}
           </Text>
-        </Box>
+        </Flex>
       </Flex>
     </Flex>
   );

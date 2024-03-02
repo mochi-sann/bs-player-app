@@ -11,7 +11,7 @@ export const MusicList = (props: MusicListProps) => {
     <Flex direction={"column"}>
       {props.MusicList.map((music, key) => (
         <React.Fragment key={key}>
-          <MusicItem MusicItem={music} key={key} />
+          <MusicItem MusicItem={music} id={key} />
           {key < props.MusicList.length - 1 && <Divider />}
         </React.Fragment>
       ))}

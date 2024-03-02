@@ -45,6 +45,49 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music: 203,
       },
+      {
+        auther: "auther",
+        image: "https://picsum.photos/200",
+        mapper: "mapper",
+        music_dir: "music_dir",
+        music_file: "music_file",
+        music_name: "music_name",
+        length_of_music: 503,
+      },
+      {
+        auther: "ほげほげ",
+        image: "https://picsum.photos/201",
+        mapper: "mapper",
+        music_dir: "music_dir",
+        music_file: "music_file",
+        music_name: "music_name",
+        length_of_music: 39_100,
+      },
+      {
+        auther: "heyhey",
+        image: "https://picsum.photos/101",
+        mapper: "mapper",
+        music_dir: "music_dir",
+        music_file: "music_file",
+        music_name: "music_name",
+        length_of_music: 203,
+      },
+    ],
+  },
+};
+
+export const One: Story = {
+  args: {
+    MusicList: [
+      {
+        auther: "auther",
+        image: "https://picsum.photos/200",
+        mapper: "mapper",
+        music_dir: "music_dir",
+        music_file: "music_file",
+        music_name: "music_name",
+        length_of_music: 503,
+      },
     ],
   },
 };
