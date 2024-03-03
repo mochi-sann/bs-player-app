@@ -26,6 +26,7 @@ export const Main: Story = {
       music_name: "music_name",
       length_of_music: 503,
     },
+    id: 1,
   },
 };
 
@@ -40,5 +41,6 @@ export const NoIcon: Story = {
       music_name: "music_name",
       length_of_music: 503,
     },
+    id: 101,
   },
 };

@@ -26,6 +26,7 @@ export const MusicItem = (props: MusicItemProps) => {
       direction="row"
       wrap="wrap"
       flex={"1"}
+      styles={{}}
     >
       <Flex w={"24px"} justify={"center"}>
         {hovered ? (
