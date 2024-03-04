@@ -3,18 +3,25 @@
 import React, { useEffect } from "react";
 import { ThemeProvider } from "../src/Components/ui/theme-provider";
 import "../src/styles.css";
+import { withThemeByClassName } from "@storybook/addon-themes";
 // theme.ts file from previous step
 import { addons } from "@storybook/preview-api";
 import type { Preview } from "@storybook/react";
-import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode";
 
 // theme.ts file from previous step
 export const decorators = [
   (renderStory: any) => (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      {renderStory()}
+      <div className="bg-red-600">{renderStory()}</div>
     </ThemeProvider>
   ),
+  withThemeByClassName({
+    themes: {
+      light: "light",
+      dark: "dark",
+    },
+    defaultTheme: "dark",
+  }),
 ];
 const preview: Preview = {
   parameters: {
