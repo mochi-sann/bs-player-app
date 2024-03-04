@@ -3,7 +3,6 @@ import { useI18nContext } from "../i18n/i18n-react";
 import { Locales } from "../i18n/i18n-types";
 import { locales } from "../i18n/i18n-util";
 import { loadLocaleAsync } from "../i18n/i18n-util.async";
-import { Box, Button, InputLabel, NativeSelect, Title } from "@mantine/core";
 
 export const TitileNavBar = () => {
   const { LL, setLocale, locale } = useI18nContext();
@@ -17,11 +16,11 @@ export const TitileNavBar = () => {
   };
 
   return (
-    <Box>
-      <Title>{LL.HI({ name: "こんにちは" })}</Title>
-      <InputLabel>
+    <div>
+      <p>{LL.HI({ name: "こんにちは" })}</p>
+      <label>
         {LL.SELECTED_LOCALE()}
-        <NativeSelect value={locale || ""} onChange={onLocaleSelected}>
+        <select value={locale || ""} onChange={onLocaleSelected}>
           <option value="" disabled>
             {LL.CHOOSE_LOCALE()}
           </option>
@@ -30,11 +29,11 @@ export const TitileNavBar = () => {
               {locale}
             </option>
           ))}
-        </NativeSelect>
-      </InputLabel>
+        </select>
+      </label>
 
-      <Button onClick={() => setLocale("ja")}>{LL.main.changeLang()}bbb</Button>
-      <Button onClick={() => setLocale("en")}>{LL.main.changeLang()}aaa</Button>
-    </Box>
+      <button onClick={() => setLocale("ja")}>{LL.main.changeLang()}bbb</button>
+      <button onClick={() => setLocale("en")}>{LL.main.changeLang()}aaa</button>
+    </div>
   );
 };

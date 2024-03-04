@@ -2,7 +2,6 @@ import { useState } from "react";
 import { SongData } from "../../src-tauri/bindings/SongData";
 import { MusicFileListAtom } from "../lib/jotai/jotai";
 import { selectListOptionType } from "../lib/types";
-import { Image } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
@@ -45,7 +44,7 @@ export const MusicPlayer = () => {
     <div>
       <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
       {AudioUrl?.music_file}
-      {isImagePending ? "Loading..." : <Image src={imageUrl} alt="image" />}
+      {isImagePending ? "Loading..." : <img src={imageUrl} alt="image" />}
       {isAudioPending ? (
         "Loading..."
       ) : (

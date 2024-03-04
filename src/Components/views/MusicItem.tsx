@@ -1,8 +1,10 @@
 import { SongData } from "../../../src-tauri/bindings/SongData";
 import { F7PlayFill } from "../icons/F7PlayFill";
 import { Fa6RegularImage } from "../icons/Fa6RegularImage";
-import { ActionIcon, Avatar, Box, Flex, Text } from "@mantine/core";
-import { useHover } from "@mantine/hooks";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import { useHover } from "@uidotdev/usehooks";
 
 function formatSeconds(seconds: number) {
   let minutes = Math.floor(seconds / 60);
@@ -14,51 +16,36 @@ type MusicItemProps = {
   id: number;
 };
 export const MusicItem = (props: MusicItemProps) => {
-  const { hovered, ref } = useHover();
+  const [ref, hovered] = useHover();
 
   return (
-    <Flex
+    <div
       ref={ref}
-      p={12}
-      gap={20}
-      justify="flex-start"
-      align="center"
-      direction="row"
-      wrap="wrap"
-      flex={"1"}
-      styles={{}}
+      className="p-3 gap-5 justify-flex-start align-center flex wrap-wrap flex-1 flex-row"
     >
-      <Flex w={"24px"} justify={"center"}>
+      <div className="w-[24px] justify-">
         {hovered ? (
-          <ActionIcon variant="subtle" color="gray">
+          <Button size={"icon"}>
             <F7PlayFill height={32} width={32} />
-          </ActionIcon>
+          </Button>
         ) : (
-          <Text style={{ color: "white" }}>{props.id + 1}</Text>
+          <p>{props.id + 1}</p>
         )}
-      </Flex>
-      <Avatar
-        src={props.MusicItem.image}
-        variant="filled"
-        radius="sm"
-        size="md"
-        color="rgba(255, 255, 255, 0)"
-      >
-        <Fa6RegularImage height={32} width={32} />
+      </div>
+      <Avatar>
+        <AvatarImage src={props.MusicItem.image} alt="avatar" />
+        <AvatarFallback>
+          <Fa6RegularImage height={32} width={32} />
+        </AvatarFallback>
       </Avatar>
-      <Flex direction="column" justify="center" align="flex-start" gap={-4}>
-        <Text size="md" fw={700} style={{ lineHeight: 1.1 }}>
-          {props.MusicItem.music_name}
-        </Text>
-        <Text size="sm" style={{ lineHeight: 1.1 }}>
-          {props.MusicItem.auther}
-        </Text>
-      </Flex>
-      <Flex justify={"end"} flex={1} gap={50}>
-        <Box>
-          <Text
+      <div className="flex flex-col justify-center align-center gap-0">
+        <p className="font-bold  font-md">{props.MusicItem.music_name}</p>
+        <p className="font-sm">{props.MusicItem.auther}</p>
+      </div>
+      <div className=" flex justify-center flex-1 gap-14">
+        <div className="flex justify-center items-center">
+          <p
             style={{
-              color: "white",
               fontSize: 12,
               fontFamily: "Inter",
               fontWeight: "300",
@@ -66,12 +53,11 @@ export const MusicItem = (props: MusicItemProps) => {
             }}
           >
             {props.MusicItem.mapper}
-          </Text>
-        </Box>
-        <Flex justify={"end"} w={100}>
-          <Text
+          </p>
+        </div>
+        <div className=" w-24l flex justify-center items-center">
+          <p
             style={{
-              color: "white",
               fontSize: 12,
               fontFamily: "Inter",
               fontWeight: "300",
@@ -79,9 +65,9 @@ export const MusicItem = (props: MusicItemProps) => {
             }}
           >
             {formatSeconds(props.MusicItem.length_of_music)}
-          </Text>
-        </Flex>
-      </Flex>
-    </Flex>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
