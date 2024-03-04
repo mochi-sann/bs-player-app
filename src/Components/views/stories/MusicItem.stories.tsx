@@ -27,6 +27,9 @@ export const Main: Story = {
       length_of_music: 503,
     },
     id: 1,
+    onclick(id) {
+      console.log(id);
+    },
   },
 };
 
