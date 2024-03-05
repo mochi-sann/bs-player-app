@@ -1,6 +1,5 @@
 import { SongDataType } from "../types";
 import { invoke } from "@tauri-apps/api";
-import { join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { atom } from "jotai";
 import { atomWithSuspenseQuery } from "jotai-tanstack-query";

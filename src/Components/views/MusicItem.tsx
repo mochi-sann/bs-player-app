@@ -7,11 +7,6 @@ import { Center } from "../ui/center";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useHover } from "@uidotdev/usehooks";
 
-function formatSeconds(seconds: number) {
-  let minutes = Math.floor(seconds / 60);
-  seconds = seconds % 60;
-  return `${minutes.toString().padStart(1, "0")}:${seconds.toString().padStart(2, "0")}`;
-}
 type MusicItemProps = {
   MusicItem: SongData;
   id: number;
@@ -23,7 +18,7 @@ export const MusicItem = (props: MusicItemProps) => {
   return (
     <div
       ref={ref}
-      className="p-3 gap-5 justify-flex-start align-center flex wrap-wrap flex-1 flex-row hover:bg-gray-100/10 rounded-sm"
+      className="p-3 gap-5 justify-flex-start align-center flex wrap-wrap flex-1 flex-row hover:bg-gray-100/10 duration-100 rounded-sm"
     >
       <div className="w-[30px] flex justify-center items-center ">
         {hovered ? (

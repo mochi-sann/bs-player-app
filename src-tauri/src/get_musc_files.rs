@@ -1,11 +1,12 @@
 use std::{
-    env::join_paths, fs::{self, ReadDir}, path::PathBuf
+    env::join_paths,
+    fs::{self, ReadDir},
+    path::PathBuf,
 };
 
 use serde::Serialize;
 use serde_json::Value;
 use ts_rs::TS;
-
 
 use crate::types::info_dat_types::load_book_from_json_file;
 
@@ -106,7 +107,7 @@ impl MusicFile {
         // なければ空のデータを返す
         Ok(json_info_dat)
     }
-    //音楽ファイルから秒数を取得する 
+    //音楽ファイルから秒数を取得する
 
     fn get_song_datas(&self) -> Vec<SongData> {
         let mut file_list: Vec<SongData> = Vec::new();
