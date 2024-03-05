@@ -4,6 +4,7 @@ import { Fa6RegularImage } from "../icons/Fa6RegularImage";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Center } from "../ui/center";
+import { useI18nContext } from "@/i18n/i18n-react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useHover } from "@uidotdev/usehooks";
 
@@ -15,6 +16,7 @@ type MusicItemProps = {
 export const MusicItem = (props: MusicItemProps) => {
   const [ref, hovered] = useHover();
 
+  const { LL } = useI18nContext();
   return (
     <div
       ref={ref}
@@ -23,6 +25,7 @@ export const MusicItem = (props: MusicItemProps) => {
       <div className="w-[30px] flex justify-center items-center ">
         {hovered ? (
           <Button
+            aria-label={LL.play_music()}
             size={"icon"}
             variant={"ghost"}
             onClick={() => props?.onclick(props.id)}

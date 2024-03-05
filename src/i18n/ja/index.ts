@@ -9,6 +9,8 @@ const ja: Translations = {
   },
   appName: "BS プレイヤーアプリ",
   HI: "こんにちは! {name}!" as `${string}{name}${string}`,
+  play_music: "音楽を再生",
+  loading: "読み込み中...",
 } satisfies BaseTranslation;
 
 export default ja;

@@ -9,6 +9,8 @@ const en: Translations = {
   SELECTED_LOCALE: "English",
   CHOOSE_LOCALE: "Choose a language",
   HI: "Hi {name}!" as `${string}{name}${string}`, // Update the type of HI property
+  play_music: "Play Music",
+  loading: "Loading...",
 } satisfies BaseTranslation;
 
 export default en;

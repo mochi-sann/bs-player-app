@@ -44,6 +44,14 @@ type RootTranslation = {
    * @param {unknown} name
    */
   HI: RequiredParams<"name">;
+  /**
+   * P​l​a​y​ ​M​u​s​i​c
+   */
+  play_music: string;
+  /**
+   * L​o​a​d​i​n​g​.​.​.
+   */
+  loading: string;
 };
 
 export type TranslationFunctions = {
@@ -73,6 +81,14 @@ export type TranslationFunctions = {
    * Hi {name}!
    */
   HI: (arg: { name: unknown }) => LocalizedString;
+  /**
+   * Play Music
+   */
+  play_music: () => LocalizedString;
+  /**
+   * Loading...
+   */
+  loading: () => LocalizedString;
 };
 
 export type Formatters = {};
