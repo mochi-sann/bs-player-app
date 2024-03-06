@@ -1,7 +1,9 @@
-use lofty::{Accessor, AudioFile, ParseOptions, ParsingMode, Probe, TaggedFileExt};
+use lofty::{Accessor, AudioFile, ParseOptions, ParsingMode, Probe, TaggedFile, TaggedFileExt};
 use log::{info, warn};
 use std::{
-    fs::{self, ReadDir}, io::BufReader, path::PathBuf
+    fs::{self, File, ReadDir},
+    io::BufReader,
+    path::PathBuf,
 };
 
 use serde::Serialize;
@@ -109,21 +111,24 @@ impl MusicFile {
         //     path.set_extension("ogg");
         // }
 
-        let path: PathBuf  = match mucsic_file_path.extension().unwrap().to_str().unwrap() {
-             "egg" => {
-                let reader = BufReader::new(mucsic_file_path);
-
-                Probe::with_file_type(reader, file_type)
-
-             },
-            _ => mucsic_file_path
+        let tagged_file: TaggedFile = match mucsic_file_path.extension().unwrap().to_str().unwrap() {
+            "egg" => {
+                let file = File::open(mucsic_file_path).expect("ERROR: Failed to open file!");
+                let reader = BufReader::new(file);
+                let probe = Probe::with_file_type(reader, lofty::FileType::Vorbis);
+                let tagged_file = probe.read().expect("ERROR: Failed to read file!");
+                tagged_file
+            }
+            _ => {
+                let tagged_file = Probe::open(mucsic_file_path.as_path())
+                    .expect("ERROR: Bad path provided!")
+                    .read()
+                    .expect("ERROR: Failed to read file!");
+                tagged_file
+            }
         };
-         let parsing_options = ParseOptions::new().parsing_mode(ParsingMode::Relaxed);
+        let parsing_options = ParseOptions::new().parsing_mode(ParsingMode::Relaxed);
 
-        let tagged_file = Probe::open(path.as_path())?.options(parsing_options)
-            .expect("ERROR: Bad path provided!")
-            .read()
-            .expect("ERROR: Failed to read file!");
         let _tag = match tagged_file.primary_tag() {
             Some(primary_tag) => primary_tag,
             // If the "primary" tag doesn't exist, we just grab the
@@ -168,8 +173,7 @@ impl MusicFile {
                             .unwrap_or_default()
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
-                        length_of_music: self.get_bs_music_durication(full_music_file_path) 
-                            ,
+                        length_of_music: self.get_bs_music_durication(full_music_file_path),
                     };
                     log::info!("song_data_temp {:?}", song_data_temp);
                     file_list.push(song_data_temp);
