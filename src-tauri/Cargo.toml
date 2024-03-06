@@ -22,6 +22,7 @@ tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", br
 window-shadows = { git = "https://github.com/tauri-apps/window-shadows.git" }
 
 log = "0.4.21"
+lofty = "0.18.2"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

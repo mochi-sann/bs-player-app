@@ -52,12 +52,24 @@ import type { ComponentMeta, ComponentStoryObj } from '@storybook/react'
 
 import { {{ inputs.name | pascal }} } from './{{ inputs.name | pascal }}'
 
-export default {
-  component: {{ inputs.name | pascal }},
-} as ComponentMeta<typeof {{ inputs.name | pascal }}>
 
-export const Default: ComponentStoryObj<typeof {{ inputs.name | pascal }}> = {
-  args: { onClick: action('クリック') },
+const meta = {
+  title: "features/{{ inputs.name | pascal }}",
+  component: {{ inputs.name | pascal }},
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
+  parameters: {
+    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
+    layout: "fullscreen",
+  },
+} satisfies Meta<typeof  {{ inputs.name | pascal }}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Main: Story = {
+  args: {
+  },
   parameters: {
     docs: {
       description: {
@@ -65,17 +77,8 @@ export const Default: ComponentStoryObj<typeof {{ inputs.name | pascal }}> = {
       },
     },
   },
-}
-export const Story: ComponentStoryObj<typeof {{ inputs.name | pascal }}> = {
-  args: { onClick: action('クリック') },
-  parameters: {
-    docs: {
-      description: {
-        story: `Storyの説明マークダウン。`,
-      },
-    },
-  },
-}
+};
+
 ```
 
 # `{{ inputs.name | pascal }}/{{ inputs.name | pascal }}.test.ts`

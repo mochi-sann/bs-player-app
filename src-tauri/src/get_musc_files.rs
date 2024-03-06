@@ -1,7 +1,7 @@
+use lofty::{Accessor, AudioFile, ParseOptions, ParsingMode, Probe, TaggedFileExt};
 use log::{info, warn};
 use std::{
-    fs::{self, ReadDir},
-    path::PathBuf,
+    fs::{self, ReadDir}, io::BufReader, path::PathBuf
 };
 
 use serde::Serialize;
@@ -103,6 +103,41 @@ impl MusicFile {
         Ok(json_info_dat)
     }
     //音楽ファイルから秒数を取得する
+    fn get_bs_music_durication(&self, mucsic_file_path: PathBuf) -> i32 {
+        // pathの最後の拡張子が.eggだった場合.oggに変換する
+        // if path.extension().unwrap() == "egg" {
+        //     path.set_extension("ogg");
+        // }
+
+        let path: PathBuf  = match mucsic_file_path.extension().unwrap().to_str().unwrap() {
+             "egg" => {
+                let reader = BufReader::new(mucsic_file_path);
+
+                Probe::with_file_type(reader, file_type)
+
+             },
+            _ => mucsic_file_path
+        };
+         let parsing_options = ParseOptions::new().parsing_mode(ParsingMode::Relaxed);
+
+        let tagged_file = Probe::open(path.as_path())?.options(parsing_options)
+            .expect("ERROR: Bad path provided!")
+            .read()
+            .expect("ERROR: Failed to read file!");
+        let _tag = match tagged_file.primary_tag() {
+            Some(primary_tag) => primary_tag,
+            // If the "primary" tag doesn't exist, we just grab the
+            // first tag we can find. Realistically, a tag reader would likely
+            // iterate through the tags to find a suitable one.
+            None => tagged_file.first_tag().expect("ERROR: No tags found!"),
+        };
+
+        let properties = tagged_file.properties();
+
+        let duration = properties.duration();
+        let seconds = duration.as_secs() % 60;
+        seconds as i32
+    }
 
     fn get_song_datas(&self) -> Vec<SongData> {
         let mut file_list: Vec<SongData> = Vec::new();
@@ -133,9 +168,10 @@ impl MusicFile {
                             .unwrap_or_default()
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
-                        length_of_music: info_dat["_songTimeOffset"].as_i64().unwrap_or_default()
-                            as i32,
+                        length_of_music: self.get_bs_music_durication(full_music_file_path) 
+                            ,
                     };
+                    log::info!("song_data_temp {:?}", song_data_temp);
                     file_list.push(song_data_temp);
                 }
                 Err(err) => {
