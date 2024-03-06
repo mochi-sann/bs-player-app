@@ -18,7 +18,6 @@ fn get_file_list(get_dir_path: String) -> Vec<String> {
     for path in paths {
         let path = path.unwrap().path();
         let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
-        println!("{}", file_name);
         file_list.push(file_name);
     }
     file_list

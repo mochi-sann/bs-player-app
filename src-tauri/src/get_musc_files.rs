@@ -59,13 +59,11 @@ impl MusicFile {
     fn _get_music_dirs_files(&self) -> Vec<String> {
         let mut file_list: Vec<String> = Vec::new();
         let paths = self.get_music_dirs();
-        println!("paths : {:?}", paths);
         for path in paths {
             let files_paths = fs::read_dir(path).unwrap();
             let music_file_list = self._filter_music_files(files_paths);
             file_list.extend(music_file_list);
         }
-        println!("file_list : {:?}", file_list);
         file_list
     }
     fn _filter_music_files(&self, file: ReadDir) -> Vec<String> {
@@ -102,9 +100,6 @@ impl MusicFile {
             )));
         }
         let json_info_dat = load_book_from_json_file(info_dat_path.as_path())?;
-        // println!("info_dat : {:?}", info_dat);
-        // あれば読み込む
-        // なければ空のデータを返す
         Ok(json_info_dat)
     }
     //音楽ファイルから秒数を取得する
@@ -121,7 +116,6 @@ impl MusicFile {
                     let full_music_file_path = path.join(musicfile_file_path);
                     let full_music_image_path =
                         path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
-                    println!("info_dat : {:?}", full_music_file_path);
 
                     let song_data_temp = SongData {
                         music_file: full_music_file_path.to_str().unwrap().to_string(),
@@ -153,7 +147,6 @@ impl MusicFile {
                 }
             }
         }
-        println!("file_list : {:?}", file_list);
         file_list
     }
 }

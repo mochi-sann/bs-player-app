@@ -9,7 +9,6 @@ export const TitileNavBar = () => {
       <label>{LL.SELECTED_LOCALE()}</label>
       <button onClick={() => setLocale("ja")}>{LL.main.changeLang()}bbb</button>
       <button onClick={() => setLocale("en")}>{LL.main.changeLang()}aaa</button>
-      import {ChangeEventHandler} from "react";
     </div>
   );
 };
