@@ -1,5 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use tauri::Manager; // クロージャー内の型付けなどをサポートしてくれる。
+use window_shadows::set_shadow;
 
 use std::fs;
 mod get_musc_files;
@@ -54,6 +56,18 @@ fn get_music_file(file_list: Vec<String>, base_dir_path: String) -> Vec<String> 
 
 fn main() {
     tauri::Builder::default()
+        .setup(|app| {
+        // "main" ウィンドウの取得
+        let main_window = app.get_window("main").unwrap();
+
+        // ウィンドウに window-shadows の装飾を適用
+        // Windows, macOS で有効
+        #[cfg(any(windows, target_os = "macos"))]
+        set_shadow(main_window, true).unwrap();
+
+        Ok(())
+    })
+
         .invoke_handler(tauri::generate_handler![
             greet,
             get_file_list,

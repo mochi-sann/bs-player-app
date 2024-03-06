@@ -20,7 +20,6 @@ export * from "./{{ inputs.name | pascal }}";
 
 ```typescript
 import {use{{ inputs.name | pascal }}} from "./use{{ inputs.name | pascal }}"
-import styles from './{{ inputs.name | pascal }}.module.scss'
 
 type {{ inputs.name | pascal }}Props = {
 

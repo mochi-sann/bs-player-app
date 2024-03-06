@@ -19,6 +19,8 @@ ts-rs = "7.1.1"
 hound = "3.5.1"
 
 tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+window-shadows = { git = "https://github.com/tauri-apps/window-shadows.git" }
+
 log = "0.4.21"
 
 [features]

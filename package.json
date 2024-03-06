@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate": "scaffdog"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
