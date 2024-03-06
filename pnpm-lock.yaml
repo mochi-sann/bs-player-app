@@ -166,6 +166,9 @@ devDependencies:
   storybook-dark-mode:
     specifier: ^3.0.3
     version: 3.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+  storybook-i18n:
+    specifier: ^2.1.1
+    version: 2.1.1
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
@@ -9628,6 +9631,10 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
+    dev: true
+
+  /storybook-i18n@2.1.1:
+    resolution: {integrity: sha512-SK8WZBE5aDAGTHL0zELlvot3BT4AcPSMkwbXPaGJ0666nwawN/vpfmGdje9ZoQylEzPQRGH6Ihqx7UXVFIT9hA==}
     dev: true
 
   /storybook@7.6.17:

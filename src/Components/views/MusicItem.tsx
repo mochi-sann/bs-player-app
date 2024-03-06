@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Center } from "../ui/center";
 import { useI18nContext } from "@/i18n/i18n-react";
+import { formatTime } from "@/lib/utils";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useHover } from "@uidotdev/usehooks";
 
@@ -45,11 +46,11 @@ export const MusicItem = (props: MusicItemProps) => {
         </Avatar>
       </Center>
       <div className="align-center flex flex-col justify-center gap-0">
-        <p className="font-md  font-bold">{props.MusicItem.music_name}</p>
-        <p className="font-sm">{props.MusicItem.auther}</p>
+        <p className="text-xl  font-bold">{props.MusicItem.music_name}</p>
+        <p className="text-sm">{props.MusicItem.auther}</p>
       </div>
-      <div className=" flex flex-1 justify-end gap-14">
-        <div className="flex items-center justify-center">
+      <div className=" flex flex-1 justify-end gap-14 px-4">
+        <div className="flex w-16 items-center justify-end">
           <p
             style={{
               fontSize: 12,
@@ -61,7 +62,7 @@ export const MusicItem = (props: MusicItemProps) => {
             {props.MusicItem.mapper}
           </p>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex w-16 items-center justify-end">
           <p
             style={{
               fontSize: 12,
@@ -70,7 +71,7 @@ export const MusicItem = (props: MusicItemProps) => {
               wordWrap: "break-word",
             }}
           >
-            {props.MusicItem.length_of_music_sec}
+            {formatTime(props.MusicItem.length_of_music_sec)}
           </p>
         </div>
       </div>
