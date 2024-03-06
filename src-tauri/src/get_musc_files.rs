@@ -1,9 +1,9 @@
-use lofty::{Accessor, AudioFile, ParseOptions, ParsingMode, Probe, TaggedFile, TaggedFileExt};
-use log::{info, warn};
+use lofty::{ AudioFile,  Probe, TaggedFile, TaggedFileExt};
+use log::{ warn};
 use std::{
     fs::{self, File, ReadDir},
     io::BufReader,
-    path::PathBuf,
+    path::PathBuf, time::Duration,
 };
 
 use serde::Serialize;
@@ -15,13 +15,14 @@ use crate::types::info_dat_types::load_book_from_json_file;
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
 pub struct SongData {
+    id: i32,
     music_file: String,
     music_name: String,
     music_dir: String,
     mapper: String,
     auther: String,
     image: String,
-    length_of_music: i32,
+    length_of_music_sec: i32,
 }
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
@@ -105,29 +106,41 @@ impl MusicFile {
         Ok(json_info_dat)
     }
     //音楽ファイルから秒数を取得する
-    fn get_bs_music_durication(&self, mucsic_file_path: PathBuf) -> i32 {
+    fn get_bs_music_durication(&self, music_file_path: PathBuf) ->Result< Duration , Box<dyn std::error::Error> > {
+        if !music_file_path.exists() {
+            // なければ空のデータを返す
+            return Err(Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "音楽ファイルがが存在しません",
+            )));
+        }
         // pathの最後の拡張子が.eggだった場合.oggに変換する
         // if path.extension().unwrap() == "egg" {
         //     path.set_extension("ogg");
         // }
 
-        let tagged_file: TaggedFile = match mucsic_file_path.extension().unwrap().to_str().unwrap() {
+        let tagged_file: TaggedFile = match music_file_path.extension().unwrap().to_str().unwrap()
+        {
             "egg" => {
-                let file = File::open(mucsic_file_path).expect("ERROR: Failed to open file!");
+                let file = File::open(music_file_path).expect("ERROR: Failed to open file!");
                 let reader = BufReader::new(file);
                 let probe = Probe::with_file_type(reader, lofty::FileType::Vorbis);
                 let tagged_file = probe.read().expect("ERROR: Failed to read file!");
                 tagged_file
             }
             _ => {
-                let tagged_file = Probe::open(mucsic_file_path.as_path())
-                    .expect("ERROR: Bad path provided!")
-                    .read()
-                    .expect("ERROR: Failed to read file!");
-                tagged_file
+                                log::error!("Failed to get music duration: ");
+            return Err(Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "音楽ファイルがが存在しません",
+            )));
+                // let tagged_file = Probe::open(music_file_path.as_path())
+                //     .expect("ERROR: Bad path provided!")
+                //     .read()
+                //     .expect("ERROR: Failed to read file!");
+                // tagged_file
             }
         };
-        let parsing_options = ParseOptions::new().parsing_mode(ParsingMode::Relaxed);
 
         let _tag = match tagged_file.primary_tag() {
             Some(primary_tag) => primary_tag,
@@ -140,14 +153,14 @@ impl MusicFile {
         let properties = tagged_file.properties();
 
         let duration = properties.duration();
-        let seconds = duration.as_secs() % 60;
-        seconds as i32
+        let _seconds = duration.as_secs() ;
+        Ok(duration)
     }
 
     fn get_song_datas(&self) -> Vec<SongData> {
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
-        for path in paths {
+        for (index , path)in paths.iter().enumerate() {
             let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
@@ -158,6 +171,7 @@ impl MusicFile {
                         path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
 
                     let song_data_temp = SongData {
+                        id: index as i32,
                         music_file: full_music_file_path.to_str().unwrap().to_string(),
                         music_name: info_dat["_songName"]
                             .as_str()
@@ -173,9 +187,16 @@ impl MusicFile {
                             .unwrap_or_default()
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
-                        length_of_music: self.get_bs_music_durication(full_music_file_path),
+                        length_of_music_sec: match self.get_bs_music_durication(full_music_file_path) {
+                            Ok(duration) => duration.as_secs() as i32,
+                            Err(err) => {
+                                // Handle the error case, e.g. log an error message
+                                log::error!("Failed to get music duration: {:?}", err);
+                                0 // Return a default value
+                            }
+                        },
                     };
-                    log::info!("song_data_temp {:?}", song_data_temp);
+                    // log::info!("song_data_temp {:?}", song_data_temp);
                     file_list.push(song_data_temp);
                 }
                 Err(err) => {
