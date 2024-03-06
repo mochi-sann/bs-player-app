@@ -1,37 +1,56 @@
 import LogoImage from "../../../assets/icon.png";
+import { appWindow } from "@tauri-apps/api/window";
+import { Maximize, Minus, X } from "lucide-react";
 
 type NavBarProps = {};
 
 export const NavBar = (props: NavBarProps) => {
+  function minimize() {
+    appWindow.minimize();
+  }
+
+  async function maximize() {
+    let maximizeState = await appWindow.isMaximized();
+
+    if (!maximizeState) {
+      appWindow.maximize();
+    } else {
+      appWindow.unmaximize();
+    }
+  }
+
+  function hide() {
+    appWindow.hide();
+  }
   return (
-    <nav
-      className="canDrag sticky left-0 top-0 z-50 flex w-full flex-col border-b  bg-white/5 px-6 py-4 text-center font-sans shadow sm:flex-row sm:items-baseline sm:justify-between sm:text-left"
-      data-tauri-drag-region
-    >
-      <div className="mb-2 sm:mb-0">
-        <a
-          href="/"
-          className="text-grey-darkest hover:text-blue-dark inline-flex items-center gap-4 text-2xl font-bold no-underline"
-        >
-          <img src={LogoImage} alt="logo" className="h-6 w-6" />
-          BS Player
-        </a>
-      </div>
-      <div className="titlebar-button" id="titlebar-minimize">
-        <img
-          src="https://api.iconify.design/mdi:window-minimize.svg"
-          alt="minimize"
-        />
-      </div>
-      <div className="titlebar-button" id="titlebar-maximize">
-        <img
-          src="https://api.iconify.design/mdi:window-maximize.svg"
-          alt="maximize"
-        />
-      </div>
-      <div className="titlebar-button" id="titlebar-close">
-        <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-      </div>
-    </nav>
+    <header className="bg-fixe h-12 select-none bg-white/5">
+      <nav
+        data-tauri-drag-region
+        className="mx-auto flex items-center justify-between"
+        aria-label="Global"
+      >
+        <div className=" inline-flex items-center gap-2 px-5">
+          <img src={LogoImage} alt="logo" className="h-4 w-4" />
+          <p className="text-center font-bold">BS Player</p>
+        </div>
+        <ul className="flex gap-x-1">
+          <li>
+            <button onClick={minimize} className="window-control-button">
+              <Minus size="16" />
+            </button>
+          </li>
+          <li>
+            <button onClick={maximize} className="window-control-button">
+              <Maximize size="16" />
+            </button>
+          </li>
+          <li>
+            <button onClick={hide} className="window-control-button">
+              <X size="16" />
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 };

@@ -57,17 +57,16 @@ fn get_music_file(file_list: Vec<String>, base_dir_path: String) -> Vec<String> 
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-        // "main" ウィンドウの取得
-        let main_window = app.get_window("main").unwrap();
+            // "main" ウィンドウの取得
+            let main_window = app.get_window("main").unwrap();
 
-        // ウィンドウに window-shadows の装飾を適用
-        // Windows, macOS で有効
-        #[cfg(any(windows, target_os = "macos"))]
-        set_shadow(main_window, true).unwrap();
+            // ウィンドウに window-shadows の装飾を適用
+            // Windows, macOS で有効
+            #[cfg(any(windows, target_os = "macos"))]
+            set_shadow(main_window, true).unwrap();
 
-        Ok(())
-    })
-
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             greet,
             get_file_list,
