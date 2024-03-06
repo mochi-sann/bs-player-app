@@ -1,5 +1,4 @@
 import { Layout } from "./Layout";
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
@@ -17,7 +16,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Main: Story = {
-  args: {},
+  args: {
+    children: "children",
+  },
   parameters: {
     docs: {
       description: {

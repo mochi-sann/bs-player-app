@@ -1,5 +1,4 @@
 import { NavBar } from "./NavBar";
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {

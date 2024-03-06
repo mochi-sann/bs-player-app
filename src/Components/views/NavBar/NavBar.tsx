@@ -2,9 +2,7 @@ import LogoImage from "../../../assets/icon.png";
 import { appWindow } from "@tauri-apps/api/window";
 import { Maximize, Minus, X } from "lucide-react";
 
-type NavBarProps = {};
-
-export const NavBar = (props: NavBarProps) => {
+export const NavBar = () => {
   function minimize() {
     appWindow.minimize();
   }
