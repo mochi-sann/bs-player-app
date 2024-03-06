@@ -37,6 +37,7 @@
     "react-i18next": "^14.0.5",
     "react-player": "^2.14.1",
     "react-select": "^5.8.0",
+    "scaffdog": "^3.0.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
@@ -44,6 +45,7 @@
     "wonka": "^6.3.4"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^7.6.17",
     "@storybook/addon-essentials": "^7.6.17",
     "@storybook/addon-interactions": "^7.6.17",
     "@storybook/addon-links": "^7.6.17",

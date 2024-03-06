@@ -1,8 +1,8 @@
+use log::{info, warn};
 use std::{
     fs::{self, ReadDir},
     path::PathBuf,
 };
-use log::{info, warn};
 
 use serde::Serialize;
 use serde_json::Value;
@@ -105,7 +105,6 @@ impl MusicFile {
     //音楽ファイルから秒数を取得する
 
     fn get_song_datas(&self) -> Vec<SongData> {
-
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
         for path in paths {
