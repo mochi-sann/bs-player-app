@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { MusicPlayer } from "./Components/MusicPlayer";
-import { TitileNavBar } from "./Components/TitileNavBar";
+import { TitileNavBar } from "./Components/views/TitileNavBar";
 import TypesafeI18n from "./i18n/i18n-react";
 import { detectLocale } from "./i18n/i18n-util";
 import { loadLocaleAsync } from "./i18n/i18n-util.async";

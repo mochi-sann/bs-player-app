@@ -20,9 +20,9 @@ export const MusicItem = (props: MusicItemProps) => {
   return (
     <div
       ref={ref}
-      className="p-3 gap-5 justify-flex-start align-center flex wrap-wrap flex-1 flex-row hover:bg-gray-100/10 duration-100 rounded-sm"
+      className="justify-flex-start align-center wrap-wrap flex flex-1 flex-row gap-5 rounded-sm p-3 duration-100 hover:bg-gray-100/10"
     >
-      <div className="w-[30px] flex justify-center items-center ">
+      <div className="flex w-[30px] items-center justify-center ">
         {hovered ? (
           <Button
             aria-label={LL.play_music()}
@@ -44,12 +44,12 @@ export const MusicItem = (props: MusicItemProps) => {
           </AvatarFallback>
         </Avatar>
       </Center>
-      <div className="flex flex-col justify-center align-center gap-0">
-        <p className="font-bold  font-md">{props.MusicItem.music_name}</p>
+      <div className="align-center flex flex-col justify-center gap-0">
+        <p className="font-md  font-bold">{props.MusicItem.music_name}</p>
         <p className="font-sm">{props.MusicItem.auther}</p>
       </div>
-      <div className=" flex justify-end flex-1 gap-14">
-        <div className="flex justify-center items-center">
+      <div className=" flex flex-1 justify-end gap-14">
+        <div className="flex items-center justify-center">
           <p
             style={{
               fontSize: 12,

@@ -5,6 +5,7 @@ use std::fs;
 mod get_musc_files;
 mod types;
 use get_musc_files::get_bs_music_files;
+use tauri_plugin_log::LogTarget;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -59,6 +60,11 @@ fn main() {
             get_music_file,
             get_bs_music_files
         ])
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
+                .build(),
+        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

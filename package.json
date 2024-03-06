@@ -39,6 +39,7 @@
     "react-select": "^5.8.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
     "typesafe-i18n": "^5.26.2",
     "wonka": "^6.3.4"
   },
@@ -66,6 +67,7 @@
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "storybook": "^7.6.17",
     "storybook-dark-mode": "^3.0.3",
     "tailwindcss": "^3.4.1",
