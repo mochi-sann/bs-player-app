@@ -61,6 +61,18 @@ export const MusicItem = (props: MusicItemProps) => {
             {props.MusicItem.mapper}
           </p>
         </div>
+        <div className="flex items-center justify-center">
+          <p
+            style={{
+              fontSize: 12,
+              fontFamily: "Inter",
+              fontWeight: "300",
+              wordWrap: "break-word",
+            }}
+          >
+            {props.MusicItem.length_of_music_sec}
+          </p>
+        </div>
       </div>
     </div>
   );
