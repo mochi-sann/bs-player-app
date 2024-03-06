@@ -1,9 +1,10 @@
-use lofty::{ AudioFile,  Probe, TaggedFile, TaggedFileExt};
-use log::{ warn};
+use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
+use log::warn;
 use std::{
     fs::{self, File, ReadDir},
     io::BufReader,
-    path::PathBuf, time::Duration,
+    path::PathBuf,
+    time::Duration,
 };
 
 use serde::Serialize;
@@ -106,7 +107,10 @@ impl MusicFile {
         Ok(json_info_dat)
     }
     //音楽ファイルから秒数を取得する
-    fn get_bs_music_durication(&self, music_file_path: PathBuf) ->Result< Duration , Box<dyn std::error::Error> > {
+    fn get_bs_music_durication(
+        &self,
+        music_file_path: PathBuf,
+    ) -> Result<Duration, Box<dyn std::error::Error>> {
         if !music_file_path.exists() {
             // なければ空のデータを返す
             return Err(Box::new(std::io::Error::new(
@@ -119,8 +123,7 @@ impl MusicFile {
         //     path.set_extension("ogg");
         // }
 
-        let tagged_file: TaggedFile = match music_file_path.extension().unwrap().to_str().unwrap()
-        {
+        let tagged_file: TaggedFile = match music_file_path.extension().unwrap().to_str().unwrap() {
             "egg" => {
                 let file = File::open(music_file_path).expect("ERROR: Failed to open file!");
                 let reader = BufReader::new(file);
@@ -129,11 +132,11 @@ impl MusicFile {
                 tagged_file
             }
             _ => {
-                                log::error!("Failed to get music duration: ");
-            return Err(Box::new(std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "音楽ファイルがが存在しません",
-            )));
+                log::error!("Failed to get music duration: ");
+                return Err(Box::new(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "音楽ファイルがが存在しません",
+                )));
                 // let tagged_file = Probe::open(music_file_path.as_path())
                 //     .expect("ERROR: Bad path provided!")
                 //     .read()
@@ -153,14 +156,14 @@ impl MusicFile {
         let properties = tagged_file.properties();
 
         let duration = properties.duration();
-        let _seconds = duration.as_secs() ;
+        let _seconds = duration.as_secs();
         Ok(duration)
     }
 
     fn get_song_datas(&self) -> Vec<SongData> {
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
-        for (index , path)in paths.iter().enumerate() {
+        for (index, path) in paths.iter().enumerate() {
             let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
@@ -187,7 +190,9 @@ impl MusicFile {
                             .unwrap_or_default()
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
-                        length_of_music_sec: match self.get_bs_music_durication(full_music_file_path) {
+                        length_of_music_sec: match self
+                            .get_bs_music_durication(full_music_file_path)
+                        {
                             Ok(duration) => duration.as_secs() as i32,
                             Err(err) => {
                                 // Handle the error case, e.g. log an error message
