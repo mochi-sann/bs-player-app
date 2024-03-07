@@ -1,3 +1,4 @@
+import React from "react";
 import { SongData } from "../../../src-tauri/bindings/SongData";
 import { F7PlayFill } from "../icons/F7PlayFill";
 import { Fa6RegularImage } from "../icons/Fa6RegularImage";
@@ -14,7 +15,8 @@ type MusicItemProps = {
   id: number;
   onclick: (id: number) => void;
 };
-export const MusicItem = (props: MusicItemProps) => {
+// Memo化することで、propsが変更されない限り再レンダリングされない
+const MusicItem = (props: MusicItemProps) => {
   const [ref, hovered] = useHover();
 
   const { LL } = useI18nContext();
@@ -39,7 +41,11 @@ export const MusicItem = (props: MusicItemProps) => {
       </div>
       <Center>
         <Avatar rounded={"none"} className="rounded">
-          <AvatarImage src={props.MusicItem.image} alt="avatar" />
+          <AvatarImage
+            src={props.MusicItem.image}
+            alt="avatar"
+            loading="lazy"
+          />
           <AvatarFallback>
             <Fa6RegularImage height={32} width={32} />
           </AvatarFallback>
@@ -50,31 +56,16 @@ export const MusicItem = (props: MusicItemProps) => {
         <p className="text-sm">{props.MusicItem.auther}</p>
       </div>
       <div className=" flex flex-1 justify-end gap-14 px-4">
-        <div className="flex w-16 items-center justify-end">
-          <p
-            style={{
-              fontSize: 12,
-              fontFamily: "Inter",
-              fontWeight: "300",
-              wordWrap: "break-word",
-            }}
-          >
-            {props.MusicItem.mapper}
-          </p>
+        <div className="flex items-center justify-end text-sm">
+          <p>{props.MusicItem.mapper}</p>
         </div>
-        <div className="flex w-16 items-center justify-end">
-          <p
-            style={{
-              fontSize: 12,
-              fontFamily: "Inter",
-              fontWeight: "300",
-              wordWrap: "break-word",
-            }}
-          >
-            {formatTime(props.MusicItem.length_of_music_sec)}
-          </p>
+        <div className="flex w-16 items-center justify-end text-sm">
+          <p>{formatTime(props.MusicItem.length_of_music_sec)}</p>
         </div>
       </div>
     </div>
   );
 };
+
+const MusicItemMemo = React.memo(MusicItem);
+export { MusicItemMemo as MusicItem };

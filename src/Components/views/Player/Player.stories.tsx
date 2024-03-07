@@ -35,10 +35,112 @@ type Story = StoryObj<typeof meta>;
 export const Main: Story = {
   args: {
     playing: true,
-    slider: {
-      max: 405,
-      playingSec: 29,
+    max: 405,
+    playingSec: 29,
+    SongData: {
+      auther: "auther",
+      image: "https://picsum.photos/200",
+      mapper: "mapper",
+      music_dir: "music_dir",
+      music_file: "music_file",
+      music_name: "music_name",
+      id: 3,
+      length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
     },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `コンポーネントの説明マークダウン。`,
+      },
+    },
+  },
+};
+
+export const Zero: Story = {
+  args: {
+    playing: true,
+    max: 405,
+    playingSec: 0,
+    SongData: {
+      auther: "auther",
+      image: "https://picsum.photos/200",
+      mapper: "mapper",
+      music_dir: "music_dir",
+      music_file: "music_file",
+      music_name: "music_name",
+      id: 3,
+      length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `コンポーネントの説明マークダウン。`,
+      },
+    },
+  },
+};
+
+export const Max: Story = {
+  args: {
+    playing: true,
+    max: 100,
+    playingSec: 100,
+    SongData: {
+      auther: "auther",
+      image: "https://picsum.photos/200",
+      mapper: "mapper",
+      music_dir: "music_dir",
+      music_file: "music_file",
+      music_name: "music_name",
+      id: 3,
+      length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `コンポーネントの説明マークダウン。`,
+      },
+    },
+  },
+};
+
+export const NoneImage: Story = {
+  args: {
+    playing: true,
+    max: 100,
+    playingSec: 100,
+    SongData: {
+      auther: "auther",
+      image: "",
+      mapper: "mapper",
+      music_dir: "music_dir",
+      music_file: "music_file",
+      music_name: "music_name",
+      id: 3,
+      length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `コンポーネントの説明マークダウン。`,
+      },
+    },
+  },
+};
+export const SongDataNull: Story = {
+  args: {
+    playing: true,
+    max: 100,
+    playingSec: 100,
+    SongData: null,
   },
   parameters: {
     docs: {

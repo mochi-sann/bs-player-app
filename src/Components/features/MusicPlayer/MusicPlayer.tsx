@@ -9,10 +9,25 @@ import ReactPlaer from "react-player";
 export const MusicPlayer = () => {
   const { LL } = useI18nContext();
   const [musickFileList] = useAtom(MusicFileListAtomAsync);
+  const {
+    playAndPause,
+    PlayerState,
+    setPlayerState,
+    SkipBack,
+    SkipForward,
+    seek,
+    onProgress,
+  } = useMusicPlayer();
+
   const PlayMusic = (music: number) => {
-    console.log(music, "music");
+    setPlayerState((prev) => {
+      return {
+        ...prev,
+        selectedSong: musickFileList.data[music],
+        isPlaying: true,
+      };
+    });
   };
-  const { playAndPause } = useMusicPlayer();
 
   return (
     <div>
@@ -25,9 +40,25 @@ export const MusicPlayer = () => {
           <MusicList MusicList={musickFileList.data} onClick={PlayMusic} />
         </div>
       )}
-      <ReactPlaer />
+      <ReactPlaer
+        url={PlayerState.selectedSong?.music_file}
+        playing={PlayerState.isPlaying}
+        onSeek={seek}
+        onProgress={onProgress}
+        width={0}
+        height={0}
+      />
 
-      <Player PlayAndPause={playAndPause} />
+      <Player
+        PlayAndPause={playAndPause}
+        seek={seek}
+        SkipForward={SkipForward}
+        SkipBack={SkipBack}
+        max={PlayerState.selectedSong?.length_of_music_sec || 0}
+        playingSec={PlayerState.playingSec}
+        playing={PlayerState.isPlaying}
+        SongData={PlayerState.selectedSong}
+      />
     </div>
   );
 };

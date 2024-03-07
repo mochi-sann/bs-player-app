@@ -5,12 +5,14 @@ export type PlayerStateAtomType = {
   isPlaying: boolean;
   selectedSong: SongDataType | null;
   seek: number;
-  musicLienht: number;
+  musicDurication: number;
+  playingSec: number;
 };
 
 export const PlayerStateAtom = atom<PlayerStateAtomType>({
   isPlaying: false,
   seek: 0,
   selectedSong: null,
-  musicLienht: 0,
+  musicDurication: 0,
+  playingSec: 0,
 });
