@@ -9,4 +9,5 @@ export interface SongData {
   auther: string;
   image: string;
   length_of_music_sec: number;
+  length_of_music_millisec: number;
 }

@@ -26,6 +26,7 @@ export const Main: Story = {
       music_name: "music_name",
       id: 3,
       length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
     },
     id: 2,
     onclick(id) {
@@ -45,6 +46,7 @@ export const NoIcon: Story = {
       music_name: "music_name",
       id: 3,
       length_of_music_sec: 204,
+      length_of_music_millisec: 204000,
     },
     id: 101,
   },

@@ -27,6 +27,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 503,
         id: 1,
+        length_of_music_millisec: 204000,
       },
       {
         auther: "ほげほげ",
@@ -37,6 +38,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 39_100,
         id: 2,
+        length_of_music_millisec: 204000,
       },
       {
         auther: "heyhey",
@@ -47,6 +49,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 203,
         id: 3,
+        length_of_music_millisec: 204000,
       },
       {
         auther: "auther",
@@ -57,6 +60,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 503,
         id: 4,
+        length_of_music_millisec: 204000,
       },
       {
         auther: "ほげほげ",
@@ -67,6 +71,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 39_100,
         id: 5,
+        length_of_music_millisec: 204000,
       },
       {
         auther: "heyhey",
@@ -77,6 +82,7 @@ export const Main: Story = {
         music_name: "music_name",
         length_of_music_sec: 203,
         id: 6,
+        length_of_music_millisec: 204000,
       },
     ],
   },
@@ -94,6 +100,7 @@ export const One: Story = {
         music_name: "music_name",
         length_of_music_sec: 503,
         id: 1,
+        length_of_music_millisec: 204000,
       },
     ],
   },

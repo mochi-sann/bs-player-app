@@ -24,6 +24,7 @@ pub struct SongData {
     auther: String,
     image: String,
     length_of_music_sec: i32,
+    length_of_music_millisec: i32,
 }
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
@@ -191,9 +192,19 @@ impl MusicFile {
                             .to_string(),
                         image: full_music_image_path.to_str().unwrap().to_string(),
                         length_of_music_sec: match self
-                            .get_bs_music_durication(full_music_file_path)
+                            .get_bs_music_durication(full_music_file_path.clone())
                         {
                             Ok(duration) => duration.as_secs() as i32,
+                            Err(err) => {
+                                // Handle the error case, e.g. log an error message
+                                log::error!("Failed to get music duration: {:?}", err);
+                                0 // Return a default value
+                            }
+                        },
+                        length_of_music_millisec: match self
+                            .get_bs_music_durication(full_music_file_path)
+                        {
+                            Ok(duration) => duration.as_millis() as i32,
                             Err(err) => {
                                 // Handle the error case, e.g. log an error message
                                 log::error!("Failed to get music duration: {:?}", err);
