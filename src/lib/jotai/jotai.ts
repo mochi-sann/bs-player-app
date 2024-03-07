@@ -16,8 +16,6 @@ export const MusicFileListAtomAsync = atomWithSuspenseQuery((get) => ({
         ...songData,
         image: convertFileSrc(songData.image),
         music_file: convertFileSrc(songData.music_file),
-
-        length_of_music: songData.length_of_music,
       };
     });
   },
