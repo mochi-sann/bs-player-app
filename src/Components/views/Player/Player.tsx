@@ -16,12 +16,24 @@ type PlayerProps = {
   max: number;
   playingSec: number;
   SongData: SongDataType | null;
+  handleMouseDown: () => void;
+  handleMouseUp: () => void;
 };
 const PlayerContetWrapper = (props: { children: React.ReactNode }) => {
   return <div className="w-full">{props.children}</div>;
 };
 
 export const Player = (props: PlayerProps) => {
+  const handleSliderChange = (event: number[]) => {
+    // console.log({event})
+    props.seek(event[0]);
+  };
+  const handleMouseDown = () => {
+    console.log("mouse down");
+  };
+  const handleMouseUp = () => {
+    console.log("mouse up");
+  };
   return (
     <div className="h-[97px]">
       {createPortal(
@@ -81,7 +93,9 @@ export const Player = (props: PlayerProps) => {
                 max={props.max}
                 step={0.01}
                 value={[props.playingSec]}
-                onValueChange={(value) => props.seek(value[0])}
+                onValueChange={handleSliderChange}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
               />
             </div>
           </PlayerContetWrapper>

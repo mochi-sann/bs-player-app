@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import { useMusicPlayer } from "./useMusicPlayer";
 import { MusicList } from "@/Components/views/MusicList";
 import { Player } from "@/Components/views/Player";
 import { useI18nContext } from "@/i18n/i18n-react";
 import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
+import ReactPlayer from "react-player";
 import ReactPlaer from "react-player";
 
 export const MusicPlayer = () => {
@@ -17,6 +19,9 @@ export const MusicPlayer = () => {
     SkipForward,
     seek,
     onProgress,
+    ReactPlayerRef,
+    handleMouseDown,
+    handleMouseUp,
   } = useMusicPlayer();
 
   const PlayMusic = (music: number) => {
@@ -41,6 +46,7 @@ export const MusicPlayer = () => {
         </div>
       )}
       <ReactPlaer
+        ref={ReactPlayerRef}
         url={PlayerState.selectedSong?.music_file}
         playing={PlayerState.isPlaying}
         onSeek={seek}
@@ -58,6 +64,8 @@ export const MusicPlayer = () => {
         playingSec={PlayerState.playingSec}
         playing={PlayerState.isPlaying}
         SongData={PlayerState.selectedSong}
+        handleMouseDown={handleMouseDown}
+        handleMouseUp={handleMouseUp}
       />
     </div>
   );

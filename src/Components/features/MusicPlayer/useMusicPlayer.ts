@@ -1,11 +1,15 @@
+import { useRef, useState } from "react";
 import { PlayerStateAtom } from "@/lib/jotai/Player.Jotai";
 import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
+import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
 export const useMusicPlayer = () => {
   const [PlayerState, setPlayerState] = useAtom(PlayerStateAtom);
   const [musicList] = useAtom(MusicFileListAtomAsync);
+  const [Seeking, setSeeking] = useState(false);
+  const ReactPlayerRef = useRef<ReactPlayer | null>(null);
 
   const playAndPause = () => {
     setPlayerState((prev) => {
@@ -29,14 +33,30 @@ export const useMusicPlayer = () => {
     });
   };
   const seek = (passdSec: number): number => {
-    // setPlayerState((prev) => {
-    //   return { ...prev, playingSec: passdSec };
-    // });
+    // setSeeking(true);
+    console.log("seeking");
+    setPlayerState((prev) => {
+      return { ...prev, playingSec: passdSec };
+    });
+    // setSeeking(false);
     return passdSec;
+  };
+  const handleMouseDown = () => {
+    setSeeking(true);
+    console.log("mouse down");
+  };
+  const handleMouseUp = () => {
+    console.log("mouse up");
+
+    ReactPlayerRef.seekTo(PlayerState.playingSec);
+
+    setSeeking(false);
   };
 
   const onProgress = (progress: OnProgressProps) => {
-    console.log({ progress });
+    if (Seeking) {
+      return;
+    }
     setPlayerState((prev) => {
       return { ...prev, playingSec: progress.playedSeconds };
     });
@@ -50,5 +70,8 @@ export const useMusicPlayer = () => {
     SkipBack,
     SkipForward,
     onProgress,
+    ReactPlayerRef,
+    handleMouseDown,
+    handleMouseUp,
   };
 };
