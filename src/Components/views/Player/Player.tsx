@@ -11,23 +11,17 @@ type PlayerProps = {
   SkipForward: () => void;
   SkipBack: () => void;
   PlayAndPause: () => void;
-  seek: (passdSec: number) => void;
   playing: boolean;
   max: number;
   playingSec: number;
   SongData: SongDataType | null;
-  handleMouseDown: () => void;
-  handleMouseUp: () => void;
+  handleSeek: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const PlayerContetWrapper = (props: { children: React.ReactNode }) => {
   return <div className="w-full">{props.children}</div>;
 };
 
 export const Player = (props: PlayerProps) => {
-  const handleSliderChange = (event: number[]) => {
-    // console.log({event})
-    props.seek(event[0]);
-  };
   const handleMouseDown = () => {
     console.log("mouse down");
   };
@@ -93,9 +87,9 @@ export const Player = (props: PlayerProps) => {
                 max={props.max}
                 step={0.01}
                 value={[props.playingSec]}
-                onValueChange={handleSliderChange}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
+                onChange={props.handleSeek}
               />
             </div>
           </PlayerContetWrapper>
