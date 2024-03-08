@@ -1,19 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { PlayerStateAtom } from "@/lib/jotai/Player.Jotai";
-import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
-import { use } from "i18next";
+import { MusicFileListAtomAsync, VolmeAtom } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
-import ReactPlayer from "react-player";
-import { OnProgressProps } from "react-player/base";
 
 export const useMusicPlayer = () => {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const audioCtx = useRef<AudioContext | null>(null);
+  const gainNode = useRef<GainNode | null>(null);
 
   const [PlayerState, setPlayerState] = useAtom(PlayerStateAtom);
   const [musicList] = useAtom(MusicFileListAtomAsync);
-  const [Seeking, setSeeking] = useState(false);
+  const [volume, setVolume] = useAtom(VolmeAtom); // 音量の状態を追加
 
   // webaudio api を使って再生する
 
@@ -22,12 +20,12 @@ export const useMusicPlayer = () => {
     if (audio) {
       audio.src = PlayerState.selectedSong?.music_file || "";
       console.log("audio!!!!!!!!!!!!!", { audio, PlayerState });
+      const ctx = new AudioContext();
+      audioCtx.current = ctx;
+      gainNode.current = audioCtx.current.createGain();
 
-      audio.addEventListener("loadedmetadata", () => {
-        setDuration(audio.duration);
-      });
+      audio.addEventListener("loadedmetadata", () => {});
       audio.addEventListener("timeupdate", () => {
-        setCurrentTime(audio.currentTime);
         setPlayerState((prev) => {
           return { ...prev, playingSec: audio.currentTime };
         });
@@ -52,6 +50,13 @@ export const useMusicPlayer = () => {
           return { ...prev, isPlaying: true };
         });
       }
+    }
+  };
+  const setVolumeSeek = (value: number) => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = value;
+      setVolume(value);
     }
   };
 
@@ -95,15 +100,6 @@ export const useMusicPlayer = () => {
   //   setSeeking(false);
   // };
 
-  const onProgress = (progress: OnProgressProps) => {
-    if (Seeking) {
-      return;
-    }
-    setPlayerState((prev) => {
-      return { ...prev, playingSec: progress.playedSeconds };
-    });
-  };
-
   return {
     seek,
     playAndPause,
@@ -111,7 +107,8 @@ export const useMusicPlayer = () => {
     setPlayerState,
     SkipBack,
     SkipForward,
-    onProgress,
     audioRef,
+    volume,
+    setVolumeSeek,
   };
 };

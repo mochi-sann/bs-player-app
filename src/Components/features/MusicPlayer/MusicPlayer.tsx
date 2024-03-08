@@ -16,6 +16,8 @@ export const MusicPlayer = () => {
     SkipForward,
     seek,
     audioRef,
+    setVolumeSeek,
+    volume,
   } = useMusicPlayer();
 
   const PlayMusic = (music: number) => {
@@ -53,6 +55,8 @@ export const MusicPlayer = () => {
         playing={PlayerState.isPlaying}
         SongData={PlayerState.selectedSong}
         handleSeek={seek}
+        voleme={volume}
+        handleVolemeSeek={setVolumeSeek}
       />
     </div>
   );

@@ -16,6 +16,8 @@ type PlayerProps = {
   playingSec: number;
   SongData: SongDataType | null;
   handleSeek: (value: number) => void;
+  voleme: number;
+  handleVolemeSeek: (value: number) => void;
 };
 const PlayerContetWrapper = (props: { children: React.ReactNode }) => {
   return <div className="w-full">{props.children}</div>;
@@ -99,12 +101,13 @@ export const Player = (props: PlayerProps) => {
                 <Volume2 />
                 <Slider
                   className=""
-                  max={props.max}
+                  max={1}
+                  min={0}
                   step={0.01}
-                  value={[props.playingSec]}
+                  value={[props.voleme]}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
-                  onValueChange={(e) => props.handleSeek(e[0])}
+                  onValueChange={(e) => props.handleVolemeSeek(e[0])}
                 />
               </Center>
             </div>
