@@ -1,13 +1,9 @@
-import { useRef } from "react";
 import { useMusicPlayer } from "./useMusicPlayer";
 import { MusicList } from "@/Components/views/MusicList";
 import { Player } from "@/Components/views/Player";
 import { useI18nContext } from "@/i18n/i18n-react";
-import { PlayerStateAtom } from "@/lib/jotai/Player.Jotai";
 import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
-import ReactPlayer from "react-player";
-import ReactPlaer from "react-player";
 
 export const MusicPlayer = () => {
   const { LL } = useI18nContext();
@@ -19,7 +15,6 @@ export const MusicPlayer = () => {
     SkipBack,
     SkipForward,
     seek,
-    onProgress,
     audioRef,
   } = useMusicPlayer();
 

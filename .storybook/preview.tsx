@@ -6,7 +6,6 @@ import { ThemeProvider } from "../src/Components/ui/theme-provider";
 import "../src/styles.css";
 import { withThemeByClassName } from "@storybook/addon-themes";
 // theme.ts file from previous step
-import { addons } from "@storybook/preview-api";
 import type { Preview } from "@storybook/react";
 
 // theme.ts file from previous step
@@ -14,7 +13,7 @@ export const decorators = [
   (renderStory: any) => (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <I18nProvider>
-        <div className="bg-red-600">{renderStory()}</div>
+        <div>{renderStory()}</div>
       </I18nProvider>
     </ThemeProvider>
   ),

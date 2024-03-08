@@ -34,30 +34,28 @@ export const Player = (props: PlayerProps) => {
         <div className="absolute bottom-0 left-0 flex w-full rounded-t-lg border bg-card/90 px-8 py-4 backdrop-blur">
           <PlayerContetWrapper>
             {props.SongData && (
-              <div className="flex flex-row gap-2">
-                <Center>
-                  <Avatar className="h-10 w-10 rounded">
-                    <AvatarImage
-                      src={props.SongData.image}
-                      alt="avatar"
-                      loading="lazy"
-                    />
-                    <AvatarFallback>
-                      <Fa6RegularImage height={32} width={32} />
-                    </AvatarFallback>
-                  </Avatar>
-                </Center>
+              <Center className="flex h-full w-full flex-row gap-2">
+                <Avatar className="h-10 w-10 rounded">
+                  <AvatarImage
+                    src={props.SongData.image}
+                    alt="avatar"
+                    loading="lazy"
+                  />
+                  <AvatarFallback>
+                    <Fa6RegularImage height={32} width={32} />
+                  </AvatarFallback>
+                </Avatar>
                 <div className="align-center flex flex-col justify-center gap-0">
                   <p className="text-xl  font-bold">
                     {props.SongData.music_name}
                   </p>
                   <p className="text-sm">{props.SongData.auther}</p>
                 </div>
-              </div>
+              </Center>
             )}
           </PlayerContetWrapper>
           <PlayerContetWrapper>
-            <div className="  max-w-[40rem] flex-col gap-4">
+            <div className=" flex max-w-[40rem] flex-col gap-4">
               <div className="flex w-full items-center justify-center">
                 <Button
                   onClick={props.SkipBack}
