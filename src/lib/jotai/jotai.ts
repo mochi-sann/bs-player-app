@@ -3,7 +3,6 @@ import { invoke } from "@tauri-apps/api";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { atom } from "jotai";
 import { atomWithSuspenseQuery } from "jotai-tanstack-query";
-import { atomWithStorage } from "jotai/utils";
 
 export const MusicFileListAtom = atom<SongDataType[]>([]);
 
@@ -21,5 +20,3 @@ export const MusicFileListAtomAsync = atomWithSuspenseQuery((get) => ({
     });
   },
 }));
-
-export const VolmeAtom = atomWithStorage("AudioVolme", 0);
