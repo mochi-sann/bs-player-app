@@ -15,7 +15,7 @@ const meta = {
     SkipForward: {
       action: "SkipForward",
     },
-    seek: {
+    handleSeek: {
       action: (value: any) => {
         action("seek")(value);
       },
@@ -48,6 +48,7 @@ export const Main: Story = {
       length_of_music_sec: 204,
       length_of_music_millisec: 204000,
     },
+    voleme: 0.5,
   },
   parameters: {
     docs: {

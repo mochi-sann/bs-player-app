@@ -1,12 +1,9 @@
-import { useRef } from "react";
 import { useMusicPlayer } from "./useMusicPlayer";
 import { MusicList } from "@/Components/views/MusicList";
 import { Player } from "@/Components/views/Player";
 import { useI18nContext } from "@/i18n/i18n-react";
 import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
-import ReactPlayer from "react-player";
-import ReactPlaer from "react-player";
 
 export const MusicPlayer = () => {
   const { LL } = useI18nContext();
@@ -18,13 +15,13 @@ export const MusicPlayer = () => {
     SkipBack,
     SkipForward,
     seek,
-    onProgress,
-    ReactPlayerRef,
-    handleMouseDown,
-    handleMouseUp,
+    audioRef,
+    setVolumeSeek,
+    volume,
   } = useMusicPlayer();
 
   const PlayMusic = (music: number) => {
+    console.log({ music });
     setPlayerState((prev) => {
       return {
         ...prev,
@@ -45,27 +42,21 @@ export const MusicPlayer = () => {
           <MusicList MusicList={musickFileList.data} onClick={PlayMusic} />
         </div>
       )}
-      <ReactPlaer
-        ref={ReactPlayerRef}
-        url={PlayerState.selectedSong?.music_file}
-        playing={PlayerState.isPlaying}
-        onSeek={seek}
-        onProgress={onProgress}
-        width={0}
-        height={0}
-      />
+      <audio ref={audioRef}>
+        <track kind="captions" src={PlayerState.selectedSong?.music_file} />
+      </audio>
 
       <Player
         PlayAndPause={playAndPause}
-        seek={seek}
         SkipForward={SkipForward}
         SkipBack={SkipBack}
         max={PlayerState.selectedSong?.length_of_music_sec || 0}
         playingSec={PlayerState.playingSec}
         playing={PlayerState.isPlaying}
         SongData={PlayerState.selectedSong}
-        handleMouseDown={handleMouseDown}
-        handleMouseUp={handleMouseUp}
+        handleSeek={seek}
+        voleme={volume}
+        handleVolemeSeek={setVolumeSeek}
       />
     </div>
   );
