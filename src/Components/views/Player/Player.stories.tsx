@@ -20,6 +20,10 @@ const meta = {
         action("seek")(value);
       },
     }, // Add the missing property 'slider.seek' here
+    playingSec: {
+      type: "number",
+      control: { type: "range", min: 0, max: 100, step: 1 },
+    },
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
@@ -75,6 +79,7 @@ export const Zero: Story = {
       length_of_music_sec: 204,
       length_of_music_millisec: 204000,
     },
+    voleme: 0.5,
   },
   parameters: {
     docs: {
@@ -101,6 +106,7 @@ export const Max: Story = {
       length_of_music_sec: 204,
       length_of_music_millisec: 204000,
     },
+    voleme: 0.5,
   },
   parameters: {
     docs: {
@@ -127,6 +133,7 @@ export const NoneImage: Story = {
       length_of_music_sec: 204,
       length_of_music_millisec: 204000,
     },
+    voleme: 0.5,
   },
   parameters: {
     docs: {
@@ -142,6 +149,7 @@ export const SongDataNull: Story = {
     max: 100,
     playingSec: 100,
     SongData: null,
+    voleme: 0.5,
   },
   parameters: {
     docs: {

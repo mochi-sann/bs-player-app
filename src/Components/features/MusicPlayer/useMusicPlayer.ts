@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { PlayerStateAtom } from "@/lib/jotai/Player.Jotai";
 import { MusicFileListAtomAsync, VolmeAtom } from "@/lib/jotai/jotai";
 import { useAtom } from "jotai";
