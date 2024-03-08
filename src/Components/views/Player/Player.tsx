@@ -15,7 +15,7 @@ type PlayerProps = {
   max: number;
   playingSec: number;
   SongData: SongDataType | null;
-  handleSeek: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSeek: (value: number) => void;
 };
 const PlayerContetWrapper = (props: { children: React.ReactNode }) => {
   return <div className="w-full">{props.children}</div>;
@@ -89,7 +89,7 @@ export const Player = (props: PlayerProps) => {
                 value={[props.playingSec]}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
-                onChange={props.handleSeek}
+                onValueChange={(e) => props.handleSeek(e[0])}
               />
             </div>
           </PlayerContetWrapper>

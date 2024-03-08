@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { PlayerStateAtom } from "@/lib/jotai/Player.Jotai";
 import { MusicFileListAtomAsync } from "@/lib/jotai/jotai";
+import { use } from "i18next";
 import { useAtom } from "jotai";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
-export const useMusicPlayer = ({ MusicFileUrl }: { MusicFileUrl: string }) => {
+export const useMusicPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -13,39 +14,47 @@ export const useMusicPlayer = ({ MusicFileUrl }: { MusicFileUrl: string }) => {
   const [PlayerState, setPlayerState] = useAtom(PlayerStateAtom);
   const [musicList] = useAtom(MusicFileListAtomAsync);
   const [Seeking, setSeeking] = useState(false);
+
   // webaudio api を使って再生する
 
   useEffect(() => {
     const audio = audioRef.current;
-    console.log({ PlayerState, MusicFileUrl });
-    console.log({ audio });
     if (audio) {
-      audio.src = MusicFileUrl;
+      audio.src = PlayerState.selectedSong?.music_file || "";
+      console.log("audio!!!!!!!!!!!!!", { audio, PlayerState });
+
       audio.addEventListener("loadedmetadata", () => {
         setDuration(audio.duration);
       });
       audio.addEventListener("timeupdate", () => {
         setCurrentTime(audio.currentTime);
+        setPlayerState((prev) => {
+          return { ...prev, playingSec: audio.currentTime };
+        });
       });
+      if (PlayerState.isPlaying) {
+        audio.play();
+      }
     }
-  }, [MusicFileUrl]);
+  }, [PlayerState.selectedSong?.id]);
 
   const playAndPause = () => {
-    // setPlayerState((prev) => {
-    //   return { ...prev, isPlaying: !prev.isPlaying };
-    // });
     const audio = audioRef.current;
     if (audio) {
       if (PlayerState.isPlaying) {
         audio.pause();
+        setPlayerState((prev) => {
+          return { ...prev, isPlaying: false };
+        });
       } else {
         audio.play();
+        setPlayerState((prev) => {
+          return { ...prev, isPlaying: true };
+        });
       }
-      setPlayerState((prev) => {
-        return { ...prev, isPlaying: !prev.isPlaying };
-      });
     }
   };
+
   const SkipForward = () => {
     setPlayerState((prev) => {
       return {
@@ -62,10 +71,14 @@ export const useMusicPlayer = ({ MusicFileUrl }: { MusicFileUrl: string }) => {
       };
     });
   };
-  const seek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const seek = (value: number) => {
+    console.log("seek", value);
     const audio = audioRef.current;
     if (audio) {
-      audio.currentTime = parseFloat(e.target.value);
+      audio.currentTime = value;
+      setPlayerState((prev) => {
+        return { ...prev, playingSec: value };
+      });
     }
   };
 

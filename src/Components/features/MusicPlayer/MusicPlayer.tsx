@@ -12,7 +12,6 @@ import ReactPlaer from "react-player";
 export const MusicPlayer = () => {
   const { LL } = useI18nContext();
   const [musickFileList] = useAtom(MusicFileListAtomAsync);
-  const [PlayerStateA, setPlayerStateA] = useAtom(PlayerStateAtom);
   const {
     playAndPause,
     PlayerState,
@@ -22,9 +21,7 @@ export const MusicPlayer = () => {
     seek,
     onProgress,
     audioRef,
-  } = useMusicPlayer({
-    MusicFileUrl: PlayerStateA.selectedSong?.music_file || "",
-  });
+  } = useMusicPlayer();
 
   const PlayMusic = (music: number) => {
     console.log({ music });
