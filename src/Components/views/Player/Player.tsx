@@ -1,3 +1,4 @@
+import { VolemeSeek } from "@/Components/features/VolemeSeek";
 import { Fa6RegularImage } from "@/Components/icons/Fa6RegularImage";
 import { Button } from "@/Components/ui/button";
 import { Center } from "@/Components/ui/center";
@@ -98,16 +99,9 @@ export const Player = (props: PlayerProps) => {
           <PlayerContetWrapper>
             <div className="flex h-full justify-end">
               <Center className="flex h-full w-full max-w-48 gap-2 pl-6">
-                <Volume2 />
-                <Slider
-                  className=""
-                  max={1}
-                  min={0}
-                  step={0.01}
-                  value={[props.voleme]}
-                  onMouseDown={handleMouseDown}
-                  onMouseUp={handleMouseUp}
-                  onValueChange={(e) => props.handleVolemeSeek(e[0])}
+                <VolemeSeek
+                  voleme={props.voleme}
+                  handleVolemeSeek={props.handleVolemeSeek}
                 />
               </Center>
             </div>
