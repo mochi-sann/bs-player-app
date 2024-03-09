@@ -43,7 +43,10 @@ export const NavBar = () => {
             </button>
           </li>
           <li>
-            <button onClick={hide} className="window-control-button">
+            <button
+              onClick={hide}
+              className="window-control-button hover:bg-red-600"
+            >
               <X size="16" />
             </button>
           </li>
