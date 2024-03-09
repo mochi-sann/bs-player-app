@@ -5,7 +5,7 @@ import { Center } from "@/Components/ui/center";
 import { Slider } from "@/Components/ui/slider";
 import { SongDataType } from "@/lib/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Pause, Play, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { createPortal } from "react-dom";
 
 type PlayerProps = {

@@ -70,9 +70,6 @@
   * {
     @apply border-border;
   }
-  html {
-    @apply rounded-lg;
-  }
   body {
     @apply rounded-lg  bg-background	 text-foreground;
   }
@@ -80,6 +77,6 @@
     -webkit-app-region: drag;
   }
   .window-control-button {
-    @apply p-4 hover:bg-zinc-600;
+    @apply p-4 duration-200 hover:bg-zinc-700;
   }
 }
