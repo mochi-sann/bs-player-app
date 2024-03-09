@@ -30,6 +30,9 @@ export const useMusicPlayer = () => {
           return { ...prev, playingSec: audio.currentTime };
         });
       });
+      audio.addEventListener("ended", () => {
+        SkipForward();
+      });
       if (PlayerState.isPlaying) {
         audio.play();
       }
