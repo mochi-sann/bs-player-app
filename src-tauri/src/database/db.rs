@@ -2,9 +2,11 @@ use std::{collections::BTreeMap, str::FromStr};
 
 use futures::TryStreamExt;
 use sqlx::{
-    sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous},
-    Row, SqliteConnection, SqlitePool,
+    sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous}, Pool, Row, Sqlite, SqliteConnection, SqlitePool
 };
+use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config};
+
+use crate::{DATABASE_DIR, DATABASE_FILE};
 
 /// このモジュール内の関数の戻り値型
 type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
@@ -32,6 +34,7 @@ pub(crate) async fn migrate_database(pool: &SqlitePool) -> DbResult<()> {
     sqlx::migrate!("./migrations").run(pool).await?;
     Ok(())
 }
+
 
 pub(crate) async fn get_all_songs(pool: &SqlitePool) -> DbResult<Vec<BTreeMap<String, String>>> {
     let mut songs = vec![];

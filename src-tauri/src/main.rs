@@ -1,6 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{api::path::app_data_dir, async_runtime::block_on, Config, Manager}; // クロージャー内の型付けなどをサポートしてくれる。
+use tauri::{
+    api::path::{ app_local_data_dir },
+    async_runtime::block_on,
+    Config, Manager,
+};
+use tauri_plugin_log::LogTarget;
+// クロージャー内の型付けなどをサポートしてくれる。
 use window_shadows::set_shadow;
 
 use std::fs;
@@ -10,8 +16,11 @@ mod types;
 use dunce;
 use get_musc_files::get_bs_music_files;
 use std::env;
-use tauri_plugin_log::LogTarget;
+
+use crate::database::db::{create_sqlite_pool, migrate_database};
+
 const DATABASE_FILE: &str = "bs_player.db";
+const DATABASE_DIR: &str = "bs_player_app";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -59,22 +68,24 @@ fn get_music_file(file_list: Vec<String>, base_dir_path: String) -> Vec<String> 
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let app_data_dir = app_data_dir(&Config::default()).unwrap();
-    let database_file = app_data_dir.join(DATABASE_FILE);
+    let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
+    let database_dir = app_data_dir.join(DATABASE_DIR);
+    let database_file = database_dir.join(DATABASE_FILE);
     let db_exists = std::fs::metadata(&database_file).is_ok();
+    println!("database_dir: {:?}", database_dir);
     if !db_exists {
-        // std::fs::create_dir(&app_data_dir)?;
+        std::fs::create_dir(&database_dir)?;
     }
-    let database_dir_str = dunce::canonicalize(&app_data_dir)
+    let database_dir_str = dunce::canonicalize(&database_dir)
         .unwrap()
         .to_string_lossy()
         .replace('\\', "/");
     let database_url = format!("sqlite://{}/{}", database_dir_str, DATABASE_FILE);
-    let sqlite_pool = block_on(database::create_sqlite_pool(&database_url))?;
+    let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
 
     //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
     if !db_exists {
-        block_on(database::migrate_database(&sqlite_pool))?;
+        block_on(migrate_database(&sqlite_pool))?;
     }
 
     tauri::Builder::default()
