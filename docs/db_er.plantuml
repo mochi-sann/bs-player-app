@@ -1,0 +1,31 @@
+@startuml yonde
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "mops_dir_path" {
+  id
+  --
+  path 
+  created_at
+  updated_at
+}
+
+entity song_data {
+  id
+  --
+  created_at 
+  updated_at
+  music_file 
+  music_name 
+  music_dir 
+  mapper 
+  auther 
+  image 
+  length_of_music_sec 
+  length_of_music_millisec 
+}
+
+@enduml

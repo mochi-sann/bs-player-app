@@ -7,7 +7,7 @@ use sqlx::{
 };
 
 /// このモジュール内の関数の戻り値型
-type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
+pub type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 /// SQLiteのコネクションプールを作成して返す
 pub(crate) async fn create_sqlite_pool(database_url: &str) -> DbResult<SqlitePool> {
