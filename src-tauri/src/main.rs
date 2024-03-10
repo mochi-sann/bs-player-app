@@ -6,6 +6,7 @@ use window_shadows::set_shadow;
 use std::fs;
 mod get_musc_files;
 mod types;
+mod database;
 use get_musc_files::get_bs_music_files;
 use tauri_plugin_log::LogTarget;
 
