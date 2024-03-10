@@ -1,10 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{
-    api::path::{ app_local_data_dir },
-    async_runtime::block_on,
-    Config, Manager,
-};
+use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
 use tauri_plugin_log::LogTarget;
 // クロージャー内の型付けなどをサポートしてくれる。
 use window_shadows::set_shadow;
@@ -73,9 +69,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_file = database_dir.join(DATABASE_FILE);
     let db_exists = std::fs::metadata(&database_file).is_ok();
     println!("database_dir: {:?}", database_dir);
-    if !db_exists {
+    let db_dir_exists = std::fs::metadata(&database_dir).is_ok();
+    if !db_exists && !db_dir_exists   {
         std::fs::create_dir(&database_dir)?;
     }
+
     let database_dir_str = dunce::canonicalize(&database_dir)
         .unwrap()
         .to_string_lossy()
@@ -84,9 +82,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
 
     //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
-    if !db_exists {
         block_on(migrate_database(&sqlite_pool))?;
-    }
 
     tauri::Builder::default()
         .setup(|app| {
