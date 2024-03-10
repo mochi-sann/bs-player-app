@@ -491,6 +491,7 @@ name = "bsm-player-app"
 version = "0.0.0"
 dependencies = [
  "directories",
+ "dunce",
  "futures",
  "hound",
  "lofty",

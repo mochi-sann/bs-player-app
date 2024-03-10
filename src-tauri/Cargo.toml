@@ -29,6 +29,7 @@ log = "0.4.21"
 lofty = "0.18.2"
 futures = "0.3.30"
 directories = "5.0.1"
+dunce = "1.0.4"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
