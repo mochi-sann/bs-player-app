@@ -1,4 +1,5 @@
-pnpm exec lint-staged
 cd src-tauri
 cargo fmt
+cd ..
+pnpm exec lint-staged
 
