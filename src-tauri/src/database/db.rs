@@ -2,11 +2,9 @@ use std::{collections::BTreeMap, str::FromStr};
 
 use futures::TryStreamExt;
 use sqlx::{
-    sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous}, Row, SqliteConnection, SqlitePool,
+    sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous},
+    Row, SqliteConnection, SqlitePool,
 };
-
-
-
 
 /// このモジュール内の関数の戻り値型
 type DbResult<T> = Result<T, Box<dyn std::error::Error>>;

@@ -70,7 +70,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let db_exists = std::fs::metadata(&database_file).is_ok();
     println!("database_dir: {:?}", database_dir);
     let db_dir_exists = std::fs::metadata(&database_dir).is_ok();
-    if !db_exists && !db_dir_exists   {
+    if !db_exists && !db_dir_exists {
         std::fs::create_dir(&database_dir)?;
     }
 
@@ -82,7 +82,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
 
     //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
-        block_on(migrate_database(&sqlite_pool))?;
+    block_on(migrate_database(&sqlite_pool))?;
 
     tauri::Builder::default()
         .setup(|app| {
