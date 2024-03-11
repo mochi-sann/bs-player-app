@@ -18,7 +18,7 @@ pub async fn set_maps_dir_path(pool: &SqlitePool, path: String) -> DbResult<()> 
 
     Ok(())
 }
-#[derive(Debug, Serialize, Deserialize, TS)]
+#[derive(Debug, Serialize, Deserialize, TS , PartialEq  )]
 #[ts(export)]
 pub struct MapsDirPath {
     pub id: i32,
@@ -87,3 +87,38 @@ pub async fn update_maps_dir_path(pool: &SqlitePool, id: i32, path: String) -> D
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::database::db::{create_sqlite_pool, migrate_database};
+
+    use super::*;
+    #[tokio::test]
+    async fn test_set_maps_dir_path() {
+        let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
+        migrate_database(&pool).await.unwrap();
+
+        let path = String::from("/path/to/maps");
+
+        let result = set_maps_dir_path(&pool, path).await;
+        assert!(result.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_get_maps_dir_path() {
+        let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
+        migrate_database(&pool).await.unwrap();
+        let path = String::from("/path/to/maps");
+        let set_result = set_maps_dir_path(&pool, path).await;
+
+        let result = get_maps_dir_path(&pool).await;
+        let result_unwrapped = result.unwrap();
+        println!("result  : {:?}", result_unwrapped);
+        assert_eq!(result_unwrapped.len(), 1);
+        assert_eq!(result_unwrapped.get(0).unwrap().id, 1 as i32);
+        assert_eq!(result_unwrapped.get(0).unwrap().path, "/path/to/maps");
+        
+    }
+
+}
+
