@@ -64,6 +64,7 @@ jobs:
         with:
           name: nextest-archive
       - name: Run tests
+        working-directory: ./src-tauri
         run: |
           ~/.cargo/bin/cargo-nextest nextest run --archive-file nextest-archive.tar.zst \
             --partition count:${{ matrix.partition }}/2
