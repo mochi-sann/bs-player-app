@@ -5,9 +5,9 @@ name: rust_CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master, main]
   push:
-    branches: [main]
+    branches: [master, main]
   schedule:
     # Run this every day at 01:00 UTC.
     - cron: 0 1 * * *
