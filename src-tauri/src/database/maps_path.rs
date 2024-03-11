@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use futures::TryStreamExt;
 use serde::{Deserialize, Serialize};
-use sqlx::{SqlitePool};
+use sqlx::SqlitePool;
 use ts_rs::TS;
 
 use super::db::DbResult;

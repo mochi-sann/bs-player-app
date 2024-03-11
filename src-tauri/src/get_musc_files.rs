@@ -13,7 +13,7 @@ use ts_rs::TS;
 
 use crate::types::info_dat_types::load_book_from_json_file;
 
-#[derive(Debug, Clone, Serialize, TS)]
+#[derive(Debug, Clone, Serialize, TS , PartialEq)]
 #[ts(export)]
 pub struct SongData {
     id: i32,
@@ -237,4 +237,45 @@ pub fn get_bs_music_files() -> Vec<SongData> {
     let _return_resutl = &file_list.music_files;
     let music_data = file_list.get_song_datas();
     music_data
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn musics_len() {
+        // src-tauri\test\assets\maps\01 への絶対パスを取得する
+        let dir_path = String::from("./test/assets/maps");
+
+        let absolute_path = fs::canonicalize(dir_path).unwrap();
+
+        let dir_path = String::from(absolute_path.to_str().unwrap());
+        let music_file = MusicFile::new(dir_path);
+        let music_data = music_file.get_song_datas();
+        assert_eq!(music_data.len(), 1);
+    }
+    #[test]
+    fn musics_data() {
+        // src-tauri\test\assets\maps\01 への絶対パスを取得する
+        let dir_path = String::from("./test/assets/maps");
+
+        let absolute_path = fs::canonicalize(dir_path).unwrap();
+
+        let dir_path = String::from(absolute_path.to_str().unwrap());
+        let music_file = MusicFile::new(dir_path);
+        let music_data = music_file.get_song_datas();
+        let song = SongData {
+            id: 0,
+            music_file: absolute_path.join("01").join("song.egg").to_str().unwrap().to_string(),
+            music_name: "sample_song".to_string(),
+            music_dir: absolute_path.join("01").to_str().unwrap().to_string(), 
+            mapper: "mapper name".to_string(),
+            auther: "auther name".to_string(),
+            image: absolute_path.join("01").join("cover.jpg").to_str().unwrap().to_string() ,
+            length_of_music_sec: 1,
+            length_of_music_millisec: 1451,
+        };
+        assert_eq!(music_data.get(0).unwrap(), &song);
+    }
 }
