@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
 use tauri_plugin_log::LogTarget;
-#[allow(unsed_imports)]
+#[allow(clippy::unsed_imports)]
 use window_shadows::set_shadow;
 
 use std::fs;
