@@ -56,6 +56,8 @@ jobs:
 
       - name: Create empty 'out' directory
         run: mkdir out
+      - name: Create empty 'out' directory
+        run: mkdir dist
 
       - name: Run rustfmt check
         run: cargo fmt --all -- --check

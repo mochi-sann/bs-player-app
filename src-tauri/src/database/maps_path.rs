@@ -52,7 +52,7 @@ pub async fn get_maps_dir_path(pool: &SqlitePool) -> DbResult<Vec<MapsDirPath>> 
         columns.insert(id, MapsDirPath::new(id, path, created_at, updated_at));
     }
 
-    Ok(columns.into_iter().map(|(_k, v)| v).collect())
+    Ok(columns.into_values().collect())
 }
 
 pub async fn delete_maps_dir_path(pool: &SqlitePool, id: i32) -> DbResult<()> {
@@ -109,13 +109,13 @@ mod tests {
         let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
         migrate_database(&pool).await.unwrap();
         let path = String::from("/path/to/maps");
-        let set_result = set_maps_dir_path(&pool, path).await;
+        let _set_result = set_maps_dir_path(&pool, path).await;
 
         let result = get_maps_dir_path(&pool).await;
         let result_unwrapped = result.unwrap();
         println!("result  : {:?}", result_unwrapped);
         assert_eq!(result_unwrapped.len(), 1);
-        assert_eq!(result_unwrapped.get(0).unwrap().id, 1 as i32);
-        assert_eq!(result_unwrapped.get(0).unwrap().path, "/path/to/maps");
+        assert_eq!(result_unwrapped.first().unwrap().id, 1_i32);
+        assert_eq!(result_unwrapped.first().unwrap().path, "/path/to/maps");
     }
 }

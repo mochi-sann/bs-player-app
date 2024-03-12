@@ -129,8 +129,8 @@ impl MusicFile {
                 let file = File::open(music_file_path).expect("ERROR: Failed to open file!");
                 let reader = BufReader::new(file);
                 let probe = Probe::with_file_type(reader, lofty::FileType::Vorbis);
-                let tagged_file = probe.read().expect("ERROR: Failed to read file!");
-                tagged_file
+                
+                probe.read().expect("ERROR: Failed to read file!")
             }
             _ => {
                 log::error!("Failed to get music duration: ");
@@ -235,8 +235,8 @@ pub fn get_bs_music_files() -> Vec<SongData> {
     let file_list = MusicFile::new(get_dir_path);
 
     let _return_resutl = &file_list.music_files;
-    let music_data = file_list.get_song_datas();
-    music_data
+    
+    file_list.get_song_datas()
 }
 
 #[cfg(test)]
@@ -286,6 +286,6 @@ mod tests {
             length_of_music_sec: 1,
             length_of_music_millisec: 1451,
         };
-        assert_eq!(music_data.get(0).unwrap(), &song);
+        assert_eq!(music_data.first().unwrap(), &song);
     }
 }

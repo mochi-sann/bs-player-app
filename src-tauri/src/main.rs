@@ -9,7 +9,7 @@ use std::fs;
 mod database;
 mod get_musc_files;
 mod types;
-use dunce;
+
 use get_musc_files::get_bs_music_files;
 use std::env;
 
@@ -67,7 +67,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
     let database_dir = app_data_dir.join(DATABASE_DIR);
     let database_file = database_dir.join(DATABASE_FILE);
-    let db_exists = std::fs::metadata(&database_file).is_ok();
+    let db_exists = std::fs::metadata(database_file).is_ok();
     println!("database_dir: {:?}", database_dir);
     let db_dir_exists = std::fs::metadata(&database_dir).is_ok();
     if !db_exists && !db_dir_exists {
