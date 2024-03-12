@@ -67,5 +67,5 @@ jobs:
       #   run: cargo clippy --all-targets --all-features
       #   working-directory: src-tauri
       - name: Run cargo test
-        run: cargo test --all -- --check
+        run: cargo test
         working-directory: src-tauri
