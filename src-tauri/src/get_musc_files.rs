@@ -129,7 +129,7 @@ impl MusicFile {
                 let file = File::open(music_file_path).expect("ERROR: Failed to open file!");
                 let reader = BufReader::new(file);
                 let probe = Probe::with_file_type(reader, lofty::FileType::Vorbis);
-                
+
                 probe.read().expect("ERROR: Failed to read file!")
             }
             _ => {
@@ -235,7 +235,7 @@ pub fn get_bs_music_files() -> Vec<SongData> {
     let file_list = MusicFile::new(get_dir_path);
 
     let _return_resutl = &file_list.music_files;
-    
+
     file_list.get_song_datas()
 }
 
