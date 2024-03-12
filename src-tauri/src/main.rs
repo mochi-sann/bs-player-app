@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
 use tauri_plugin_log::LogTarget;
-// クロージャー内の型付けなどをサポートしてくれる。
+#[allow(unsed_imports)]
 use window_shadows::set_shadow;
 
 use std::fs;
@@ -94,6 +94,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             // ウィンドウに window-shadows の装飾を適用
             // Windows, macOS で有効
             #[cfg(any(windows, target_os = "macos"))]
+            #[allow(unused_variables)]
             set_shadow(main_window, true).unwrap();
 
             Ok(())
