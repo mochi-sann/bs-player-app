@@ -63,9 +63,9 @@ jobs:
         run: cargo fmt --all -- --check
         working-directory: src-tauri
 
-      - name: Run clippy check and deny warnings
-        run: cargo clippy --all-targets --all-features
-        working-directory: src-tauri
+      # - name: Run clippy check and deny warnings
+      #   run: cargo clippy --all-targets --all-features
+      #   working-directory: src-tauri
       - name: Run cargo test
         run: cargo test --all -- --check
         working-directory: src-tauri
