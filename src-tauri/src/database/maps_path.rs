@@ -18,7 +18,7 @@ pub async fn set_maps_dir_path(pool: &SqlitePool, path: String) -> DbResult<()> 
 
     Ok(())
 }
-#[derive(Debug, Serialize, Deserialize, TS , PartialEq  )]
+#[derive(Debug, Serialize, Deserialize, TS, PartialEq)]
 #[ts(export)]
 pub struct MapsDirPath {
     pub id: i32,
@@ -117,8 +117,5 @@ mod tests {
         assert_eq!(result_unwrapped.len(), 1);
         assert_eq!(result_unwrapped.get(0).unwrap().id, 1 as i32);
         assert_eq!(result_unwrapped.get(0).unwrap().path, "/path/to/maps");
-        
     }
-
 }
-

@@ -13,7 +13,7 @@ use ts_rs::TS;
 
 use crate::types::info_dat_types::load_book_from_json_file;
 
-#[derive(Debug, Clone, Serialize, TS , PartialEq)]
+#[derive(Debug, Clone, Serialize, TS, PartialEq)]
 #[ts(export)]
 pub struct SongData {
     id: i32,
@@ -267,12 +267,22 @@ mod tests {
         let music_data = music_file.get_song_datas();
         let song = SongData {
             id: 0,
-            music_file: absolute_path.join("01").join("song.egg").to_str().unwrap().to_string(),
+            music_file: absolute_path
+                .join("01")
+                .join("song.egg")
+                .to_str()
+                .unwrap()
+                .to_string(),
             music_name: "sample_song".to_string(),
-            music_dir: absolute_path.join("01").to_str().unwrap().to_string(), 
+            music_dir: absolute_path.join("01").to_str().unwrap().to_string(),
             mapper: "mapper name".to_string(),
             auther: "auther name".to_string(),
-            image: absolute_path.join("01").join("cover.jpg").to_str().unwrap().to_string() ,
+            image: absolute_path
+                .join("01")
+                .join("cover.jpg")
+                .to_str()
+                .unwrap()
+                .to_string(),
             length_of_music_sec: 1,
             length_of_music_millisec: 1451,
         };
