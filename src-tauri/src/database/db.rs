@@ -33,7 +33,7 @@ pub(crate) async fn migrate_database(pool: &SqlitePool) -> DbResult<()> {
     Ok(())
 }
 
-pub(crate) async fn get_all_songs(pool: &SqlitePool) -> DbResult<Vec<BTreeMap<String, String>>> {
+pub(crate) async fn _get_all_songs(pool: &SqlitePool) -> DbResult<Vec<BTreeMap<String, String>>> {
     let mut songs = vec![];
     let mut tx = pool.begin().await?;
     let mut cursor = sqlx::query("SELECT * FROM songs").fetch(&mut tx as &mut SqliteConnection);
