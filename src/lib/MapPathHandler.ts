@@ -5,7 +5,7 @@ import { MapsDirPath } from "src-tauri/bindings/MapsDirPath";
 
 export const MapPathHandler = async (dialogTItle: string) => {
   const MapPathss: Array<MapsDirPath> = await invoke("handle_get_bs_maps");
-  let bsmDefultPath = await resolve(
+  const bsmDefultPath = await resolve(
     await homeDir(),
     "BSManager",
     "SharedContent",
@@ -29,7 +29,7 @@ export const MapPathHandler = async (dialogTItle: string) => {
     const dialogOption: dialog.OpenDialogOptions = {
       title: dialogTItle,
       directory: true,
-      defaultPath: bsmDefultPath,
+      defaultPath: defaultPath,
       multiple: false,
     };
     const result = await dialog.open(dialogOption);
