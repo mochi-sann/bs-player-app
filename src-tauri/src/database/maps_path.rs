@@ -38,7 +38,7 @@ impl MapsDirPath {
     }
 }
 
-pub async fn _get_maps_dir_path(pool: &SqlitePool) -> DbResult<Vec<MapsDirPath>> {
+pub async fn get_maps_dir_path(pool: &SqlitePool) -> DbResult<Vec<MapsDirPath>> {
     const SQL1: &str = "SELECT * FROM maps_dir_path ORDER BY id ASC";
     let mut rows = sqlx::query(SQL1).fetch(pool);
 
@@ -65,7 +65,7 @@ pub async fn _delete_maps_dir_path(pool: &SqlitePool, id: i32) -> DbResult<()> {
 
     Ok(())
 }
-pub async fn _add_maps_dir_path(pool: &SqlitePool, path: String) -> DbResult<()> {
+pub async fn add_maps_dir_path(pool: &SqlitePool, path: String) -> DbResult<()> {
     // トランザクションを開始する
     // cardsテーブルにカードを挿入する
     sqlx::query("INSERT INTO maps_dir_path (path) VALUES (?)")
@@ -111,7 +111,7 @@ mod tests {
         let path = String::from("/path/to/maps");
         let _set_result = _set_maps_dir_path(&pool, path).await;
 
-        let result = _get_maps_dir_path(&pool).await;
+        let result = get_maps_dir_path(&pool).await;
         let result_unwrapped = result.unwrap();
         println!("result  : {:?}", result_unwrapped);
         assert_eq!(result_unwrapped.len(), 1);

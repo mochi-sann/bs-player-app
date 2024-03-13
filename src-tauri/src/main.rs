@@ -1,5 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use crate::handler::{folder_exists, handle_get_bs_maps, handle_set_bs_maps_path};
 use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
 use tauri_plugin_log::LogTarget;
 use window_shadows::set_shadow;
@@ -7,6 +8,7 @@ use window_shadows::set_shadow;
 use std::fs;
 mod database;
 mod get_musc_files;
+mod handler;
 mod types;
 
 use get_musc_files::get_bs_music_files;
@@ -101,7 +103,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             greet,
             get_file_list,
             get_music_file,
-            get_bs_music_files
+            get_bs_music_files,
+            handle_get_bs_maps,
+            handle_set_bs_maps_path,
+            folder_exists
         ])
         .plugin(
             tauri_plugin_log::Builder::default()

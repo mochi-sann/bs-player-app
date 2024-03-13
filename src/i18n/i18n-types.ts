@@ -23,6 +23,10 @@ type RootTranslation = {
 		 * e​n​g​l​i​s​h
 		 */
 		langName: string
+		/**
+		 * S​e​l​e​c​t​ ​B​e​a​t​ ​S​a​b​e​r​ ​M​a​p​s​ ​F​o​l​d​e​r
+		 */
+		'Select Beat Saber Maps Folder': string
 	}
 	/**
 	 * B​S​ ​p​l​a​y​e​r​ ​a​p​p
@@ -61,6 +65,10 @@ export type TranslationFunctions = {
 		 * english
 		 */
 		langName: () => LocalizedString
+		/**
+		 * Select Beat Saber Maps Folder
+		 */
+		'Select Beat Saber Maps Folder': () => LocalizedString
 	}
 	/**
 	 * BS player app

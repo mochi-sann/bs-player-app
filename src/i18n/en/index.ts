@@ -4,6 +4,7 @@ const en: Translations = {
   main: {
     changeLang: "chenge language",
     langName: "english",
+    "Select Beat Saber Maps Folder": "Select Beat Saber Maps Folder",
   },
   appName: "BS player app",
   SELECTED_LOCALE: "English",

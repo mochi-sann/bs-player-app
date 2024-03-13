@@ -9,6 +9,7 @@ export const MusicFileListAtom = atom<SongDataType[]>([]);
 
 export const MusicFileListAtomAsync = atomWithSuspenseQuery((get) => ({
   queryKey: ["users", get(MusicFileListAtom)],
+  // eslint-disable-next-line no-empty-pattern
   queryFn: async ({ queryKey: [] }) => {
     const songDataList: SongDataType[] = await invoke("get_bs_music_files");
 

@@ -6,6 +6,7 @@ const ja: Translations = {
   main: {
     changeLang: "言語を変更",
     langName: "日本語",
+    "Select Beat Saber Maps Folder": "Beat Saber のマップフォルダを選択",
   },
   appName: "BS プレイヤーアプリ",
   HI: "こんにちは! {name}!" as `${string}{name}${string}`,

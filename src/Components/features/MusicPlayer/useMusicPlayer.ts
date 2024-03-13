@@ -33,8 +33,58 @@ export const useMusicPlayer = () => {
       audio.addEventListener("ended", () => {
         SkipForward();
       });
+
       if (PlayerState.isPlaying) {
         audio.play();
+      }
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: PlayerState.selectedSong?.music_name || "",
+          artist: PlayerState.selectedSong?.auther || "",
+          album: PlayerState.selectedSong?.mapper || "",
+
+          artwork: [
+            {
+              src: PlayerState.selectedSong?.image || "",
+              sizes: "96x96",
+              type: "image/png",
+            },
+          ],
+        });
+
+        navigator.mediaSession.setActionHandler("play", () => {
+          console.log("play");
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("pause", () => {
+          console.log("pause");
+
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("stop", () => {
+          console.log("stop");
+
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("seekbackward", () => {
+          console.log("seekbackward");
+
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("seekforward", () => {
+          console.log("seekforward");
+
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("seekto", () => {
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("previoustrack", () => {
+          /* Code excerpted. */
+        });
+        navigator.mediaSession.setActionHandler("nexttrack", () => {
+          /* Code excerpted. */
+        });
       }
     }
   }, [PlayerState.selectedSong?.id]);
