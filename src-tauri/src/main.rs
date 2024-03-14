@@ -2,8 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use crate::handler::{folder_exists, handle_get_bs_maps, handle_set_bs_maps_path};
 use database::db::get_database_url;
-use sqlx::{Pool, Sqlite};
-use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
+
+use tauri::{async_runtime::block_on, Manager};
 use tauri_plugin_log::LogTarget;
 use window_shadows::set_shadow;
 

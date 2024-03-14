@@ -1,23 +1,21 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
-use log::{info, warn, Log};
-use sqlx::{pool, prelude::FromRow};
+use log::{info, warn};
+use sqlx::{prelude::FromRow};
 use std::{
-    fs::{self, File, ReadDir},
+    fs::{self, File},
     io::BufReader,
     path::PathBuf,
     time::Duration,
 };
-use tauri::{async_runtime::block_on, State};
+use tauri::{async_runtime::block_on};
 
 use serde::Serialize;
 use serde_json::Value;
+
 use ts_rs::TS;
-use std::error::Error;
 
 use crate::{
     database::{
-        db::{self, create_sqlite_pool},
-        maps_path::get_maps_dir_path,
         songs::{add_song, get_songs_by_music_dir},
     },
     types::info_dat_types::load_book_from_json_file,
@@ -138,12 +136,13 @@ impl MusicFile {
         Ok(duration)
     }
 
-     fn db_check_and_get_song_data(&self, path: PathBuf) -> SongData {
-        let db_song_data = block_on( get_songs_by_music_dir(path.to_str().unwrap().to_string()));
+    fn db_check_and_get_song_data(&self, path: PathBuf) -> SongData {
+        let db_song_data = block_on(get_songs_by_music_dir(path.to_str().unwrap().to_string()));
         match db_song_data {
             Ok(song_data) => {
                 info!("song_data : {:?}", song_data);
-                song_data},
+                song_data
+            }
             Err(_) => {
                 info!("db_song_data : {:?}", db_song_data);
                 let info_dat = self.get_info_dat(path.clone()).unwrap();
@@ -177,20 +176,19 @@ impl MusicFile {
                         );
                         0
                     }
-                    
-                }; 
+                };
                 let song_data = SongData {
                     id: 0,
                     music_file: music_file_path,
-                    music_name: music_name,
-                    music_dir: music_dir,
-                    mapper: mapper,
-                    auther: auther,
-                    image: image,
+                    music_name,
+                    music_dir,
+                    mapper,
+                    auther,
+                    image,
                     length_of_music_sec: (length_of_music / 1000) as i32,
                     length_of_music_millisec: length_of_music as i32,
                 };
-                 let _ = block_on(add_song(song_data.clone()));
+                let _ = block_on(add_song(song_data.clone()));
 
                 song_data
             }
@@ -201,11 +199,11 @@ impl MusicFile {
         println!("get_song_datas : ");
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
-        for (index, path) in paths.iter().enumerate() {
+        for (_index, path) in paths.iter().enumerate() {
             let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let musicfile_file_path =
+                    let _musicfile_file_path =
                         PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
 
                     let song_data_temp = self.db_check_and_get_song_data(path.clone()); // log::info!("song_data_temp {:?}", song_data_temp);
@@ -231,10 +229,8 @@ pub fn get_bs_music_files() -> Vec<SongData> {
     let file_list = MusicFile::new(get_dir_path);
     println!("file_list : {:?}", file_list);
 
-
     file_list.get_song_datas()
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -2,7 +2,6 @@ use std::{collections::BTreeMap, str::FromStr};
 
 use futures::TryStreamExt;
 use sqlx::{
-    database,
     sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous},
     Connection, Row, SqliteConnection, SqlitePool,
 };
@@ -57,11 +56,11 @@ pub(crate) async fn _get_all_songs(pool: &SqlitePool) -> DbResult<Vec<BTreeMap<S
 pub fn get_database_url() -> String {
     let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
     let database_dir = app_data_dir.join(DATABASE_DIR);
-    let database_file = database_dir.join(DATABASE_FILE);
+    let _database_file = database_dir.join(DATABASE_FILE);
     let database_dir_str = dunce::canonicalize(&database_dir)
         .unwrap()
         .to_string_lossy()
         .replace('\\', "/");
     let database_url = format!("sqlite://{}/{}", database_dir_str, DATABASE_FILE);
-    return database_url;
+    database_url
 }

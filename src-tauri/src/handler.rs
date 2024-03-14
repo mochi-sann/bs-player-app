@@ -16,7 +16,7 @@ use std::path::Path;
 pub async fn handle_get_bs_maps(
     sqlite_pool: State<'_, sqlx::SqlitePool>,
 ) -> Result<Vec<MapsDirPath>, String> {
-    let maps = get_maps_dir_path(&*sqlite_pool)
+    let maps = get_maps_dir_path(&sqlite_pool)
         .await
         .map_err(|e| e.to_string())?;
     Ok(maps)
@@ -38,7 +38,7 @@ pub async fn handle_set_bs_maps_path(
     path: String,
 ) -> Result<(), String> {
     println!("path: {}", path);
-    crate::database::maps_path::add_maps_dir_path(&*sqlite_pool, path)
+    crate::database::maps_path::add_maps_dir_path(&sqlite_pool, path)
         .await
         .map_err(|e| e.to_string())?;
     Ok(())
