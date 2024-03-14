@@ -40,11 +40,14 @@
       {
         "decorations": false,
         "title": "bsm-player-app",
-        "width": 1000,
-        "height": 800,
-        "resizable": true
+        "width": 1200,
+        "height": 1000,
+        "resizable": true,
+        "minWidth": 600,
+        "minHeight": 500
       }
     ],
+
     "security": {
       "csp": null
     },
@@ -52,6 +55,7 @@
       "active": true,
       "targets": "all",
       "identifier": "com.mochi33.bsm-player-app",
+      "windows": {},
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

@@ -3,8 +3,27 @@ import { homeDir, resolve } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api/tauri";
 import { MapsDirPath } from "src-tauri/bindings/MapsDirPath";
 
-export const MapPathHandler = async (dialogTItle: string) => {
+export const MapPathHandler = async (dialogTitle: string) => {
+  const MapPathss = await haveMapPath();
+  if (MapPathss.status) {
+    return MapPathss.path;
+  } else {
+    return await setMapPath(dialogTitle);
+  }
+};
+
+export const haveMapPath = async (): Promise<{
+  status: boolean;
+  path: string;
+}> => {
   const MapPathss: Array<MapsDirPath> = await invoke("handle_get_bs_maps");
+  if (MapPathss.length > 0) {
+    return { status: true, path: MapPathss[0].path };
+  } else {
+    return { status: false, path: "" };
+  }
+};
+export const setMapPath = async (dialogTitle: string) => {
   const bsmDefultPath = await resolve(
     await homeDir(),
     "BSManager",
@@ -12,8 +31,7 @@ export const MapPathHandler = async (dialogTItle: string) => {
     "SharedMaps",
     "CustomLevels",
   );
-  console.log({ MapPathss });
-  // C:\Users\mochi\BSManager\SharedContent\SharedMaps\CustomLevels
+
   const MapPaths = await invoke("folder_exists", {
     folderPath: bsmDefultPath,
   });
@@ -23,18 +41,16 @@ export const MapPathHandler = async (dialogTItle: string) => {
   } else {
     defaultPath = await homeDir();
   }
-  if (MapPathss.length > 0) {
-    return MapPathss[0].path;
-  } else {
-    const dialogOption: dialog.OpenDialogOptions = {
-      title: dialogTItle,
-      directory: true,
-      defaultPath: defaultPath,
-      multiple: false,
-    };
-    const result = await dialog.open(dialogOption);
-    await invoke("handle_set_bs_maps_path", {
-      path: result,
-    });
-  }
+  const dialogOption: dialog.OpenDialogOptions = {
+    title: dialogTitle,
+    directory: true,
+    defaultPath: defaultPath,
+    multiple: false,
+  };
+  const result = await dialog.open(dialogOption);
+  await invoke("handle_set_bs_maps_path", {
+    path: result,
+  });
+
+  return result;
 };

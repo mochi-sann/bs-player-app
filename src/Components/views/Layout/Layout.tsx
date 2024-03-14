@@ -11,7 +11,10 @@ export const Layout = (props: LayoutProps) => {
   const { LL } = useI18nContext();
   const handleClick = async () => {
     console.log("click");
-    await MapPathHandler(LL.main["Select Beat Saber Maps Folder"]());
+    const result = await MapPathHandler(
+      LL.main["Select Beat Saber Maps Folder"](),
+    );
+    console.log(result);
   };
   return (
     <div>
