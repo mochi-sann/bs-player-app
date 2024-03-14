@@ -1,30 +1,36 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
-use log::warn;
+use log::{info, warn};
+use sqlx::prelude::FromRow;
 use std::{
-    fs::{self, File, ReadDir},
+    fs::{self, File},
     io::BufReader,
     path::PathBuf,
     time::Duration,
 };
+use tauri::async_runtime::block_on;
 
 use serde::Serialize;
 use serde_json::Value;
+
 use ts_rs::TS;
 
-use crate::types::info_dat_types::load_book_from_json_file;
+use crate::{
+    database::songs::{add_song, get_songs_by_music_dir},
+    types::info_dat_types::load_book_from_json_file,
+};
 
-#[derive(Debug, Clone, Serialize, TS)]
+#[derive(Debug, Clone, Serialize, TS, PartialEq, FromRow)]
 #[ts(export)]
 pub struct SongData {
-    id: i32,
-    music_file: String,
-    music_name: String,
-    music_dir: String,
-    mapper: String,
-    auther: String,
-    image: String,
-    length_of_music_sec: i32,
-    length_of_music_millisec: i32,
+    pub id: i32,
+    pub music_file: String,
+    pub music_name: String,
+    pub music_dir: String,
+    pub mapper: String,
+    pub auther: String,
+    pub image: String,
+    pub length_of_music_sec: i32,
+    pub length_of_music_millisec: i32,
 }
 #[derive(Debug, Clone, Serialize, TS)]
 #[ts(export)]
@@ -38,16 +44,12 @@ pub struct SongInfoDat {
 }
 #[derive(Debug, Clone)]
 struct MusicFile {
-    music_files: Vec<String>,
     dir_path: String,
 }
 
 impl MusicFile {
     fn new(dir_path: String) -> MusicFile {
-        MusicFile {
-            dir_path,
-            music_files: Vec::new(),
-        }
+        MusicFile { dir_path }
     }
     // bs のCustomLevelsのフォルダを取得する
     fn get_music_dirs(&self) -> Vec<PathBuf> {
@@ -61,39 +63,6 @@ impl MusicFile {
         file_list
     }
     // bs のCustomLevelsのフォルダをから音楽ファイルを取得する
-    fn _get_music_dirs_files(&self) -> Vec<String> {
-        let mut file_list: Vec<String> = Vec::new();
-        let paths = self.get_music_dirs();
-        for path in paths {
-            let files_paths = fs::read_dir(path).unwrap();
-            let music_file_list = self._filter_music_files(files_paths);
-            file_list.extend(music_file_list);
-        }
-        file_list
-    }
-    fn _filter_music_files(&self, file: ReadDir) -> Vec<String> {
-        let mut music_file_list: Vec<String> = Vec::new();
-
-        for file in file {
-            let path = file.unwrap().path();
-            if path.extension().unwrap() == "wav"
-                || path.extension().unwrap() == "egg"
-                || path.extension().unwrap() == "mp3"
-                || path.extension().unwrap() == "ogg"
-                || path.extension().unwrap() == "flac"
-                || path.extension().unwrap() == "aac"
-                || path.extension().unwrap() == "m4a"
-                || path.extension().unwrap() == "wma"
-                || path.extension().unwrap() == "aiff"
-                || path.extension().unwrap() == "alac"
-                || path.extension().unwrap() == "dsd"
-            {
-                music_file_list.push(path.to_str().unwrap().to_string());
-            }
-        }
-        music_file_list
-    }
-
     fn get_info_dat(&self, dir: PathBuf) -> Result<Value, Box<dyn std::error::Error>> {
         let info_dat_path = dir.join("info.dat");
         // info_dat_pathが存在するかどうか
@@ -129,8 +98,8 @@ impl MusicFile {
                 let file = File::open(music_file_path).expect("ERROR: Failed to open file!");
                 let reader = BufReader::new(file);
                 let probe = Probe::with_file_type(reader, lofty::FileType::Vorbis);
-                let tagged_file = probe.read().expect("ERROR: Failed to read file!");
-                tagged_file
+
+                probe.read().expect("ERROR: Failed to read file!")
             }
             _ => {
                 log::error!("Failed to get music duration: ");
@@ -161,58 +130,77 @@ impl MusicFile {
         Ok(duration)
     }
 
+    fn db_check_and_get_song_data(&self, path: PathBuf) -> SongData {
+        let db_song_data = block_on(get_songs_by_music_dir(path.to_str().unwrap().to_string()));
+        match db_song_data {
+            Ok(song_data) => {
+                info!("song_data : {:?}", song_data);
+                song_data
+            }
+            Err(_) => {
+                info!("db_song_data : {:?}", db_song_data);
+                let info_dat = self.get_info_dat(path.clone()).unwrap();
+                let musicfile_file_path =
+                    PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
+                let full_music_file_path = path.join(musicfile_file_path);
+                let full_music_image_path =
+                    path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
+                let music_file_path = full_music_file_path.to_str().unwrap().to_string();
+                let music_name = info_dat["_songName"]
+                    .as_str()
+                    .unwrap_or_default()
+                    .to_string();
+                let music_dir = path.to_str().unwrap().to_string();
+                let mapper = info_dat["_levelAuthorName"]
+                    .as_str()
+                    .unwrap_or_default()
+                    .to_string();
+                let auther = info_dat["_songAuthorName"]
+                    .as_str()
+                    .unwrap_or_default()
+                    .to_string();
+                let image = full_music_image_path.to_str().unwrap().to_string();
+                let length_of_music = match self.get_bs_music_durication(full_music_file_path) {
+                    Ok(duration) => duration.as_millis(),
+                    Err(err) => {
+                        warn!(
+                            "path : {:?} , 音楽ファイルの読み込みに失敗しました: {:?} ",
+                            path.to_str(),
+                            err
+                        );
+                        0
+                    }
+                };
+                let song_data = SongData {
+                    id: 0,
+                    music_file: music_file_path,
+                    music_name,
+                    music_dir,
+                    mapper,
+                    auther,
+                    image,
+                    length_of_music_sec: (length_of_music / 1000) as i32,
+                    length_of_music_millisec: length_of_music as i32,
+                };
+                let _ = block_on(add_song(song_data.clone()));
+
+                song_data
+            }
+        }
+    }
+
     fn get_song_datas(&self) -> Vec<SongData> {
+        println!("get_song_datas : ");
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
-        for (index, path) in paths.iter().enumerate() {
+        for path in paths.iter() {
             let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let musicfile_file_path =
+                    let _musicfile_file_path =
                         PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
-                    let full_music_file_path = path.join(musicfile_file_path);
-                    let full_music_image_path =
-                        path.join(info_dat["_coverImageFilename"].as_str().unwrap_or_default());
 
-                    let song_data_temp = SongData {
-                        id: index as i32,
-                        music_file: full_music_file_path.to_str().unwrap().to_string(),
-                        music_name: info_dat["_songName"]
-                            .as_str()
-                            .unwrap_or_default()
-                            .to_string(),
-                        music_dir: path.to_str().unwrap().to_string(),
-                        auther: info_dat["_songAuthorName"]
-                            .as_str()
-                            .unwrap_or_default()
-                            .to_string(),
-                        mapper: info_dat["_levelAuthorName"]
-                            .as_str()
-                            .unwrap_or_default()
-                            .to_string(),
-                        image: full_music_image_path.to_str().unwrap().to_string(),
-                        length_of_music_sec: match self
-                            .get_bs_music_durication(full_music_file_path.clone())
-                        {
-                            Ok(duration) => duration.as_secs() as i32,
-                            Err(err) => {
-                                // Handle the error case, e.g. log an error message
-                                log::error!("Failed to get music duration: {:?}", err);
-                                0 // Return a default value
-                            }
-                        },
-                        length_of_music_millisec: match self
-                            .get_bs_music_durication(full_music_file_path)
-                        {
-                            Ok(duration) => duration.as_millis() as i32,
-                            Err(err) => {
-                                // Handle the error case, e.g. log an error message
-                                log::error!("Failed to get music duration: {:?}", err);
-                                0 // Return a default value
-                            }
-                        },
-                    };
-                    // log::info!("song_data_temp {:?}", song_data_temp);
+                    let song_data_temp = self.db_check_and_get_song_data(path.clone()); // log::info!("song_data_temp {:?}", song_data_temp);
                     file_list.push(song_data_temp);
                 }
                 Err(err) => {
@@ -233,8 +221,7 @@ pub fn get_bs_music_files() -> Vec<SongData> {
     let get_dir_path =
         "C:\\Users\\mochi\\BSManager\\SharedContent\\SharedMaps\\CustomLevels".to_string();
     let file_list = MusicFile::new(get_dir_path);
+    println!("file_list : {:?}", file_list);
 
-    let _return_resutl = &file_list.music_files;
-    let music_data = file_list.get_song_datas();
-    music_data
+    file_list.get_song_datas()
 }

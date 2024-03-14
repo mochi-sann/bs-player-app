@@ -16,7 +16,7 @@ const meta = {
       action: "SkipForward",
     },
     handleSeek: {
-      action: (value: any) => {
+      action: (value: unknown) => {
         action("seek")(value);
       },
     }, // Add the missing property 'slider.seek' here

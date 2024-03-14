@@ -1,13 +1,25 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::Manager; // クロージャー内の型付けなどをサポートしてくれる。
+use crate::handler::{folder_exists, handle_get_bs_maps, handle_set_bs_maps_path};
+use database::db::get_database_url;
+
+use tauri::{async_runtime::block_on, Manager};
+use tauri_plugin_log::LogTarget;
 use window_shadows::set_shadow;
 
 use std::fs;
+mod database;
 mod get_musc_files;
+mod handler;
 mod types;
+
 use get_musc_files::get_bs_music_files;
-use tauri_plugin_log::LogTarget;
+use std::env;
+
+use crate::database::db::{create_sqlite_pool, migrate_database};
+
+const DATABASE_FILE: &str = "bs_player.db";
+const DATABASE_DIR: &str = "bs_player_app";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -54,9 +66,17 @@ fn get_music_file(file_list: Vec<String>, base_dir_path: String) -> Vec<String> 
     music_file_list
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let database_url = get_database_url();
+    let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
+
+    //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
+    block_on(migrate_database(&sqlite_pool))?;
+
     tauri::Builder::default()
         .setup(|app| {
+            app.manage(sqlite_pool);
+
             // "main" ウィンドウの取得
             let main_window = app.get_window("main").unwrap();
 
@@ -71,7 +91,10 @@ fn main() {
             greet,
             get_file_list,
             get_music_file,
-            get_bs_music_files
+            get_bs_music_files,
+            handle_get_bs_maps,
+            handle_set_bs_maps_path,
+            folder_exists
         ])
         .plugin(
             tauri_plugin_log::Builder::default()
@@ -80,4 +103,6 @@ fn main() {
         )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+
+    Ok(())
 }

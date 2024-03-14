@@ -8,7 +8,7 @@ export const NavBar = () => {
   }
 
   async function maximize() {
-    let maximizeState = await appWindow.isMaximized();
+    const maximizeState = await appWindow.isMaximized();
 
     if (!maximizeState) {
       appWindow.maximize();

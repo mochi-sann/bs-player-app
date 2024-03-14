@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 storybook-static/assets
 storybook-static
+src-tauri/test.db
+src-tauri/test.db-shm
+src-tauri/test.db-wal

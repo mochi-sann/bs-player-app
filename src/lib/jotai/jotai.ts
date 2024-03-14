@@ -1,3 +1,4 @@
+import { haveMapPath } from "../MapPathHandler";
 import { SongDataType } from "../types";
 import { invoke } from "@tauri-apps/api";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
@@ -9,6 +10,7 @@ export const MusicFileListAtom = atom<SongDataType[]>([]);
 
 export const MusicFileListAtomAsync = atomWithSuspenseQuery((get) => ({
   queryKey: ["users", get(MusicFileListAtom)],
+  // eslint-disable-next-line no-empty-pattern
   queryFn: async ({ queryKey: [] }) => {
     const songDataList: SongDataType[] = await invoke("get_bs_music_files");
 
@@ -19,6 +21,13 @@ export const MusicFileListAtomAsync = atomWithSuspenseQuery((get) => ({
         music_file: convertFileSrc(songData.music_file),
       };
     });
+  },
+}));
+export const MapPathAtomAsync = atomWithSuspenseQuery(() => ({
+  queryKey: ["MapPathAtomAsync"],
+  // eslint-disable-next-line no-empty-pattern
+  queryFn: async ({ queryKey: [] }) => {
+    return await haveMapPath();
   },
 }));
 

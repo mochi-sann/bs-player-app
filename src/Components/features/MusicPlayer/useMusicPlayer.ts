@@ -33,8 +33,22 @@ export const useMusicPlayer = () => {
       audio.addEventListener("ended", () => {
         SkipForward();
       });
+
       if (PlayerState.isPlaying) {
         audio.play();
+      }
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: PlayerState.selectedSong?.music_name || "",
+          artist: PlayerState.selectedSong?.auther || "",
+          album: PlayerState.selectedSong?.mapper || "",
+
+          artwork: [
+            {
+              src: PlayerState.selectedSong?.image || "",
+            },
+          ],
+        });
       }
     }
   }, [PlayerState.selectedSong?.id]);
