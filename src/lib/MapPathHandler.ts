@@ -3,6 +3,11 @@ import { homeDir, resolve } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api/tauri";
 import { MapsDirPath } from "src-tauri/bindings/MapsDirPath";
 
+type MapPathHandlerType = {
+  status: boolean;
+  path: string;
+};
+
 export const MapPathHandler = async (dialogTitle: string) => {
   const MapPathss = await haveMapPath();
   if (MapPathss.status) {
@@ -12,10 +17,7 @@ export const MapPathHandler = async (dialogTitle: string) => {
   }
 };
 
-export const haveMapPath = async (): Promise<{
-  status: boolean;
-  path: string;
-}> => {
+export const haveMapPath = async (): Promise<MapPathHandlerType> => {
   const MapPathss: Array<MapsDirPath> = await invoke("handle_get_bs_maps");
   if (MapPathss.length > 0) {
     return { status: true, path: MapPathss[0].path };
