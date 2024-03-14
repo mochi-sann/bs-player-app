@@ -1,5 +1,5 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
-use log::{info, warn};
+use log::{info, warn, Log};
 use sqlx::{pool, prelude::FromRow};
 use std::{
     fs::{self, File, ReadDir},
@@ -141,8 +141,11 @@ impl MusicFile {
      fn db_check_and_get_song_data(&self, path: PathBuf) -> SongData {
         let db_song_data = block_on( get_songs_by_music_dir(path.to_str().unwrap().to_string()));
         match db_song_data {
-            Ok(song_data) => song_data,
+            Ok(song_data) => {
+                info!("song_data : {:?}", song_data);
+                song_data},
             Err(_) => {
+                info!("db_song_data : {:?}", db_song_data);
                 let info_dat = self.get_info_dat(path.clone()).unwrap();
                 let musicfile_file_path =
                     PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
@@ -164,10 +167,18 @@ impl MusicFile {
                     .unwrap_or_default()
                     .to_string();
                 let image = full_music_image_path.to_str().unwrap().to_string();
-                let length_of_music = self
-                    .get_bs_music_durication(full_music_file_path)
-                    .unwrap()
-                    .as_millis();
+                let length_of_music = match self.get_bs_music_durication(full_music_file_path) {
+                    Ok(duration) => duration.as_millis(),
+                    Err(err) => {
+                        warn!(
+                            "path : {:?} , 音楽ファイルの読み込みに失敗しました: {:?} ",
+                            path.to_str(),
+                            err
+                        );
+                        0
+                    }
+                    
+                }; 
                 let song_data = SongData {
                     id: 0,
                     music_file: music_file_path,
@@ -179,7 +190,7 @@ impl MusicFile {
                     length_of_music_sec: (length_of_music / 1000) as i32,
                     length_of_music_millisec: length_of_music as i32,
                 };
-                let _result = add_song(song_data.clone());
+                 let _ = block_on(add_song(song_data.clone()));
 
                 song_data
             }

@@ -19,7 +19,6 @@ export const Layout = (props: LayoutProps) => {
   return (
     <div>
       <NavBar />
-      <Button onClick={handleClick}>click</Button>
       <div className="h-[calc(100vh-3rem)] overflow-auto">{props.children}</div>
     </div>
   );
