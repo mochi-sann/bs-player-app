@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use crate::handler::{folder_exists, handle_get_bs_maps, handle_set_bs_maps_path};
+use database::db::get_database_url;
+use sqlx::{Pool, Sqlite};
 use tauri::{api::path::app_local_data_dir, async_runtime::block_on, Config, Manager};
 use tauri_plugin_log::LogTarget;
 use window_shadows::set_shadow;
@@ -65,21 +67,7 @@ fn get_music_file(file_list: Vec<String>, base_dir_path: String) -> Vec<String> 
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
-    let database_dir = app_data_dir.join(DATABASE_DIR);
-    let database_file = database_dir.join(DATABASE_FILE);
-    let db_exists = std::fs::metadata(database_file).is_ok();
-    println!("database_dir: {:?}", database_dir);
-    let db_dir_exists = std::fs::metadata(&database_dir).is_ok();
-    if !db_exists && !db_dir_exists {
-        std::fs::create_dir(&database_dir)?;
-    }
-
-    let database_dir_str = dunce::canonicalize(&database_dir)
-        .unwrap()
-        .to_string_lossy()
-        .replace('\\', "/");
-    let database_url = format!("sqlite://{}/{}", database_dir_str, DATABASE_FILE);
+    let database_url = get_database_url();
     let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
 
     //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
