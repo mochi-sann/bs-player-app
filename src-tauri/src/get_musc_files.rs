@@ -1,13 +1,13 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
 use log::{info, warn};
-use sqlx::{prelude::FromRow};
+use sqlx::prelude::FromRow;
 use std::{
     fs::{self, File},
     io::BufReader,
     path::PathBuf,
     time::Duration,
 };
-use tauri::{async_runtime::block_on};
+use tauri::async_runtime::block_on;
 
 use serde::Serialize;
 use serde_json::Value;
@@ -15,9 +15,7 @@ use serde_json::Value;
 use ts_rs::TS;
 
 use crate::{
-    database::{
-        songs::{add_song, get_songs_by_music_dir},
-    },
+    database::songs::{add_song, get_songs_by_music_dir},
     types::info_dat_types::load_book_from_json_file,
 };
 
