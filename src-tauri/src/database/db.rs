@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, str::FromStr};
 use futures::TryStreamExt;
 use sqlx::{
     sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous},
-    Connection, Row, SqliteConnection, SqlitePool,
+    Row, SqliteConnection, SqlitePool,
 };
 use tauri::{api::path::app_local_data_dir, Config};
 

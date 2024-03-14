@@ -44,16 +44,12 @@ pub struct SongInfoDat {
 }
 #[derive(Debug, Clone)]
 struct MusicFile {
-    music_files: Vec<String>,
     dir_path: String,
 }
 
 impl MusicFile {
     fn new(dir_path: String) -> MusicFile {
-        MusicFile {
-            dir_path,
-            music_files: Vec::new(),
-        }
+        MusicFile { dir_path }
     }
     // bs のCustomLevelsのフォルダを取得する
     fn get_music_dirs(&self) -> Vec<PathBuf> {
@@ -197,7 +193,7 @@ impl MusicFile {
         println!("get_song_datas : ");
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
-        for (_index, path) in paths.iter().enumerate() {
+        for path in paths.iter() {
             let _files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
