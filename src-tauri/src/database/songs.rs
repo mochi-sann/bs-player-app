@@ -46,8 +46,7 @@ pub async fn get_all_song_map_dir(pool: &SqlitePool) -> Result<Vec<String>, sqlx
     Ok(music_dir_list)
 }
 
-pub async fn add_song(data: SongData) -> DbResult<()> {
-    let mut tx: SqliteConnection = SqliteConnection::connect(&get_database_url()).await?;
+pub async fn add_song(pool: &SqlitePool , data: SongData) -> DbResult<()> {
     log::info!("add_song : {:?}", data);
 
     sqlx::query("INSERT INTO songs (music_file, music_name, music_dir, mapper, auther, image, length_of_music_sec, length_of_music_millisec) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
@@ -59,7 +58,7 @@ pub async fn add_song(data: SongData) -> DbResult<()> {
     .bind(data.image)
     .bind(data.length_of_music_sec)
     .bind(data.length_of_music_millisec)
-    .execute(&mut tx as &mut SqliteConnection)
+    .execute(pool)
     .await?;
 
     Ok(())

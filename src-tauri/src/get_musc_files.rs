@@ -131,8 +131,8 @@ impl MusicFile {
         Ok(duration)
     }
 
-    fn db_check_and_get_song_data(&self, path: PathBuf) -> SongData {
-        let db_song_data = block_on(get_songs_by_music_dir(path.to_str().unwrap().to_string()));
+    async fn db_check_and_get_song_data(&self, path: PathBuf , pool: &SqlitePool) -> SongData {
+        let db_song_data =  get_songs_by_music_dir(path.to_str().unwrap().to_string()).await;
         match db_song_data {
             Ok(song_data) => {
                 info!("song_data : {:?}", song_data);
@@ -183,23 +183,23 @@ impl MusicFile {
                     length_of_music_sec: (length_of_music / 1000) as i32,
                     length_of_music_millisec: length_of_music as i32,
                 };
-                let _ = block_on(add_song(song_data.clone()));
+                let _ =  add_song(pool ,song_data.clone()).await;
 
                 song_data
             }
         }
     }
-    fn get_all_song_map_dir(&self, pool: &SqlitePool) -> Vec<String> {
-        match block_on(get_all_song_map_dir(pool)) {
+    async fn get_all_song_map_dir(&self, pool: &SqlitePool) -> Vec<String> {
+        match  get_all_song_map_dir(pool).await {
             Ok(value) => value,
             Err(_) => Vec::new(),
         }
     }
 
-    fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
+   async  fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
         println!("get_song_datas : ");
         let paths = self.get_music_dirs();
-        let music_file_lis_db = self.get_all_song_map_dir(pool);
+        let music_file_lis_db =  self.get_all_song_map_dir(pool).await;
         let paths_string = path_to_string(paths.clone());
         let (only_in_files, _only_in_db) = unique_elements(paths_string, music_file_lis_db);
         println!("only_in_files : {:?}", only_in_files);
@@ -208,7 +208,7 @@ impl MusicFile {
             let path = PathBuf::from(only_in_file);
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let _musicfile_file_path = self.db_check_and_get_song_data(path.clone());
+                    let _musicfile_file_path = self.db_check_and_get_song_data(path.clone(), pool);
                     let _ = PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
                 }
                 Err(err) => {
@@ -221,7 +221,7 @@ impl MusicFile {
             }
         }
 
-        let file_list: Vec<SongData> = match block_on(get_all_song(pool)) {
+        let file_list: Vec<SongData> = match (get_all_song(pool)) {
             Ok(result) => result,
             Err(err) => {
                 // Handle the error here, e.g. print an error message or return an empty vector
@@ -240,7 +240,8 @@ pub fn get_bs_music_files(sqlite_pool: State<'_, SqlitePool>) -> Vec<SongData> {
     let file_list = MusicFile::new(get_dir_path);
     println!("file_list : {:?}", file_list);
 
-    file_list.get_song_data(&sqlite_pool)
+     let songs = block_on(file_list.get_song_data(&sqlite_pool));
+     songs
 }
 
 fn path_to_string(paths: Vec<PathBuf>) -> Vec<String> {
@@ -266,6 +267,8 @@ fn unique_elements<T: std::cmp::Eq + std::hash::Hash + Clone>(
 
 #[cfg(test)]
 mod tests {
+    use crate::database::db::{create_sqlite_pool, migrate_database};
+
     use super::*;
     #[derive(Debug, Clone, Serialize, TS, PartialEq, FromRow, Eq, Hash)]
     struct TestStruc {
@@ -390,4 +393,53 @@ mod tests {
 
         assert_eq!(path_to_string(paths), expected);
     }
+    #[tokio::test]
+    async fn musics_len() {
+        let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
+        migrate_database(&pool).await.unwrap();
+        // src-tauri\test\assets\maps\01 への絶対パスを取得する
+        let dir_path = String::from("./test/assets/maps");
+
+        let absolute_path = fs::canonicalize(dir_path).unwrap();
+
+        let dir_path = String::from(absolute_path.to_str().unwrap());
+        let music_file = MusicFile::new(dir_path);
+        let music_data = music_file.get_song_data(&pool);
+        assert_eq!(music_data.await.len(), 1);
+    }
+    // fn musics_data() {
+    //     // src-tauri\test\assets\maps\01 への絶対パスを取得する
+    //     let dir_path = String::from("./test/assets/maps");
+
+    //     let absolute_path = fs::canonicalize(dir_path).unwrap();
+
+    //     let dir_path = String::from(absolute_path.to_str().unwrap());
+    //     let music_file = MusicFile::new(dir_path);
+    //     let music_data = music_file.get_song_datas();
+    //     let song = SongData {
+    //         id: 0,
+    //         music_file: absolute_path
+    //             .join("01")
+    //             .join("song.egg")
+    //             .to_str()
+    //             .unwrap()
+    //             .to_string(),
+    //         music_name: "sample_song".to_string(),
+    //         music_dir: absolute_path.join("01").to_str().unwrap().to_string(),
+    //         mapper: "mapper name".to_string(),
+    //         auther: "auther name".to_string(),
+    //         image: absolute_path
+    //             .join("01")
+    //             .join("cover.jpg")
+    //             .to_str()
+    //             .unwrap()
+    //             .to_string(),
+    //         length_of_music_sec: 1,
+    //         length_of_music_millisec: 1451,
+    //     };
+    //     assert_eq!(music_data.first().unwrap(), &song);
+    // }
 }
+
+
+
