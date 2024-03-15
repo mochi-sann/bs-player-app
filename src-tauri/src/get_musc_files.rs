@@ -1,13 +1,14 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
 use log::{info, warn};
-use sqlx::prelude::FromRow;
+use sqlx::{prelude::FromRow, SqlitePool};
 use std::{
+    collections::HashSet,
     fs::{self, File},
     io::BufReader,
     path::PathBuf,
     time::Duration,
 };
-use tauri::async_runtime::block_on;
+use tauri::{async_runtime::block_on, State};
 
 use serde::Serialize;
 use serde_json::Value;
@@ -15,7 +16,7 @@ use serde_json::Value;
 use ts_rs::TS;
 
 use crate::{
-    database::songs::{add_song, get_songs_by_music_dir},
+    database::songs::{add_song, get_all_song_map_dir, get_songs_by_music_dir},
     types::info_dat_types::load_book_from_json_file,
 };
 
@@ -188,8 +189,11 @@ impl MusicFile {
             }
         }
     }
+    fn get_all_song_map_dir(&self, pool: &SqlitePool) {
+        let _ = block_on(get_all_song_map_dir(pool));
+    }
 
-    fn get_song_datas(&self) -> Vec<SongData> {
+    fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
         println!("get_song_datas : ");
         let mut file_list: Vec<SongData> = Vec::new();
         let paths = self.get_music_dirs();
@@ -217,11 +221,136 @@ impl MusicFile {
 }
 
 #[tauri::command]
-pub fn get_bs_music_files() -> Vec<SongData> {
+pub fn get_bs_music_files(sqlite_pool: State<'_, SqlitePool>) -> Vec<SongData> {
     let get_dir_path =
         "C:\\Users\\mochi\\BSManager\\SharedContent\\SharedMaps\\CustomLevels".to_string();
     let file_list = MusicFile::new(get_dir_path);
     println!("file_list : {:?}", file_list);
 
-    file_list.get_song_datas()
+    file_list.get_song_data(&sqlite_pool)
+}
+
+fn unique_elements<T: std::cmp::Eq + std::hash::Hash + Clone>(
+    vec1: Vec<T>,
+    vec2: Vec<T>,
+) -> (HashSet<T>, HashSet<T>) {
+    let set1: HashSet<_> = vec1.into_iter().collect();
+    let set2: HashSet<_> = vec2.into_iter().collect();
+
+    let only_in_set1: HashSet<_> = set1.difference(&set2).cloned().collect();
+    let only_in_set2: HashSet<_> = set2.difference(&set1).cloned().collect();
+
+    (only_in_set1, only_in_set2)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[derive(Debug, Clone, Serialize, TS, PartialEq, FromRow, Eq, Hash)]
+    struct TestStruc {
+        a: i32,
+        text: String,
+    }
+
+    #[test]
+    fn test_unique_elements() {
+        let vec1 = vec![1, 2, 3, 4, 5];
+        let vec2 = vec![4, 5, 6, 7, 8];
+
+        let (only_in_vec1, only_in_vec2) = unique_elements(vec1, vec2);
+
+        assert_eq!(
+            only_in_vec1,
+            [1, 2, 3].iter().cloned().collect::<HashSet<_>>()
+        );
+        assert_eq!(
+            only_in_vec2,
+            [6, 7, 8].iter().cloned().collect::<HashSet<_>>()
+        );
+    }
+    #[test]
+    fn test_unique_elements_struc_same() {
+        let vec1 = vec![
+            TestStruc {
+                a: 1,
+                text: "a".to_string(),
+            },
+            TestStruc {
+                a: 2,
+                text: "b".to_string(),
+            },
+            TestStruc {
+                a: 3,
+                text: "c".to_string(),
+            },
+        ];
+        let vec2 = vec![
+            TestStruc {
+                a: 1,
+                text: "a".to_string(),
+            },
+            TestStruc {
+                a: 2,
+                text: "b".to_string(),
+            },
+            TestStruc {
+                a: 3,
+                text: "c".to_string(),
+            },
+        ];
+
+        let (only_in_vec1, only_in_vec2) = unique_elements(vec1, vec2);
+
+        assert_eq!(only_in_vec1, [].iter().cloned().collect::<HashSet<_>>());
+        assert_eq!(only_in_vec2, [].iter().cloned().collect::<HashSet<_>>());
+    }
+    #[test]
+    fn test_unique_elements_struc_left() {
+        let vec1 = vec![
+            TestStruc {
+                a: 1,
+                text: "a".to_string(),
+            },
+            TestStruc {
+                a: 2,
+                text: "b".to_string(),
+            },
+            TestStruc {
+                a: 3,
+                text: "c".to_string(),
+            },
+            TestStruc {
+                a: 5,
+                text: "b".to_string(),
+            },
+        ];
+        let vec2 = vec![
+            TestStruc {
+                a: 1,
+                text: "a".to_string(),
+            },
+            TestStruc {
+                a: 2,
+                text: "b".to_string(),
+            },
+            TestStruc {
+                a: 3,
+                text: "c".to_string(),
+            },
+        ];
+
+        let (only_in_vec1, only_in_vec2) = unique_elements(vec1, vec2);
+
+        assert_eq!(
+            only_in_vec1,
+            [TestStruc {
+                a: 5,
+                text: "b".to_string()
+            }]
+            .iter()
+            .cloned()
+            .collect::<HashSet<_>>()
+        );
+        assert_eq!(only_in_vec2, [].iter().cloned().collect::<HashSet<_>>());
+    }
 }
