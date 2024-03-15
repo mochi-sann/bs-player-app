@@ -82,6 +82,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             // ウィンドウに window-shadows の装飾を適用
             // Windows, macOS で有効
+            #[cfg(debug_assertions)]
+            app.get_window("main").unwrap().open_devtools();
+
             #[cfg(any(windows, target_os = "macos"))]
             set_shadow(main_window, true).unwrap();
 
