@@ -1,11 +1,11 @@
 use lofty::{AudioFile, Probe, TaggedFile, TaggedFileExt};
 use log::{info, warn};
-use sqlx::{pool, prelude::FromRow, SqlitePool};
+use sqlx::{prelude::FromRow, SqlitePool};
 use std::{
     collections::HashSet,
     fs::{self, File},
     io::BufReader,
-    path::{self, PathBuf},
+    path::PathBuf,
     time::Duration,
 };
 use tauri::{async_runtime::block_on, State};
@@ -192,24 +192,25 @@ impl MusicFile {
     fn get_all_song_map_dir(&self, pool: &SqlitePool) -> Vec<String> {
         match block_on(get_all_song_map_dir(pool)) {
             Ok(value) => value,
-            Err(_) => Vec::new()
+            Err(_) => Vec::new(),
         }
     }
 
     fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
         println!("get_song_datas : ");
         let paths = self.get_music_dirs();
-        let  music_file_lis_db  = self.get_all_song_map_dir(pool);
-        let paths_string = path_to_String(paths.clone());
-        let ( only_in_files, only_in_db) = unique_elements(paths_string, music_file_lis_db);
+        let music_file_lis_db = self.get_all_song_map_dir(pool);
+        let paths_string = path_to_string(paths.clone());
+        let (only_in_files, _only_in_db) = unique_elements(paths_string, music_file_lis_db);
+        println!("only_in_files : {:?}", only_in_files);
 
         for only_in_file in only_in_files.iter() {
             let path = PathBuf::from(only_in_file);
-            let _files_paths = fs::read_dir(path.clone()).unwrap();
+            let files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
-                    let _musicfile_file_path =
-                        PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
+                    let _musicfile_file_path = self.db_check_and_get_song_data(path.clone());
+                    let _ = PathBuf::from(info_dat["_songFilename"].as_str().unwrap_or_default());
                 }
                 Err(err) => {
                     warn!(
@@ -221,7 +222,7 @@ impl MusicFile {
             }
         }
 
-        let  file_list: Vec<SongData> = match block_on(get_all_song(pool)) {
+        let file_list: Vec<SongData> = match block_on(get_all_song(pool)) {
             Ok(result) => result,
             Err(err) => {
                 // Handle the error here, e.g. print an error message or return an empty vector
@@ -243,7 +244,7 @@ pub fn get_bs_music_files(sqlite_pool: State<'_, SqlitePool>) -> Vec<SongData> {
     file_list.get_song_data(&sqlite_pool)
 }
 
-fn path_to_String(paths: Vec<PathBuf>) -> Vec<String> {
+fn path_to_string(paths: Vec<PathBuf>) -> Vec<String> {
     let mut paths_string: Vec<String> = Vec::new();
     for path in paths {
         paths_string.push(path.to_str().unwrap().to_string());
@@ -388,6 +389,6 @@ mod tests {
             String::from("/path/to/file3"),
         ];
 
-        assert_eq!(path_to_String(paths), expected);
+        assert_eq!(path_to_string(paths), expected);
     }
 }
