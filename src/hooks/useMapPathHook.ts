@@ -11,7 +11,7 @@ export const useMapPathHook = () => {
 
   const setMapUrl = async () => {
     await setMapPath(LL.main["Select Beat Saber Maps Folder"]());
-    refetch();
+    await refetch();
     navigate("/");
   };
 
