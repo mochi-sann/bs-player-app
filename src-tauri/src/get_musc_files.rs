@@ -16,7 +16,10 @@ use serde_json::Value;
 use ts_rs::TS;
 
 use crate::{
-    database::songs::{add_song, get_all_song, get_all_song_map_dir, get_songs_by_music_dir},
+    database::{
+        maps_path::get_maps_dir_path,
+        songs::{add_song, get_all_song, get_all_song_map_dir, get_songs_by_music_dir},
+    },
     types::info_dat_types::load_book_from_json_file,
 };
 
@@ -131,8 +134,8 @@ impl MusicFile {
         Ok(duration)
     }
 
-    async fn db_check_and_get_song_data(&self, path: PathBuf , pool: &SqlitePool) -> SongData {
-        let db_song_data =  get_songs_by_music_dir(path.to_str().unwrap().to_string()).await;
+    async fn db_check_and_get_song_data(&self, path: PathBuf, pool: &SqlitePool) -> SongData {
+        let db_song_data = get_songs_by_music_dir(path.to_str().unwrap().to_string()).await;
         match db_song_data {
             Ok(song_data) => {
                 info!("song_data : {:?}", song_data);
@@ -183,23 +186,23 @@ impl MusicFile {
                     length_of_music_sec: (length_of_music / 1000) as i32,
                     length_of_music_millisec: length_of_music as i32,
                 };
-                let _ =  add_song(pool ,song_data.clone()).await;
+                let _ = add_song(pool, song_data.clone()).await;
 
                 song_data
             }
         }
     }
     async fn get_all_song_map_dir(&self, pool: &SqlitePool) -> Vec<String> {
-        match  get_all_song_map_dir(pool).await {
+        match get_all_song_map_dir(pool).await {
             Ok(value) => value,
             Err(_) => Vec::new(),
         }
     }
 
-   async  fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
+    async fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
         println!("get_song_datas : ");
         let paths = self.get_music_dirs();
-        let music_file_lis_db =  self.get_all_song_map_dir(pool).await;
+        let music_file_lis_db = self.get_all_song_map_dir(pool).await;
         let paths_string = path_to_string(paths.clone());
         let (only_in_files, _only_in_db) = unique_elements(paths_string, music_file_lis_db);
         println!("only_in_files : {:?}", only_in_files);
@@ -221,7 +224,7 @@ impl MusicFile {
             }
         }
 
-        let file_list: Vec<SongData> = match (get_all_song(pool)) {
+        let file_list: Vec<SongData> = match get_all_song(pool).await {
             Ok(result) => result,
             Err(err) => {
                 // Handle the error here, e.g. print an error message or return an empty vector
@@ -235,13 +238,16 @@ impl MusicFile {
 
 #[tauri::command]
 pub fn get_bs_music_files(sqlite_pool: State<'_, SqlitePool>) -> Vec<SongData> {
-    let get_dir_path =
-        "C:\\Users\\mochi\\BSManager\\SharedContent\\SharedMaps\\CustomLevels".to_string();
-    let file_list = MusicFile::new(get_dir_path);
+    let get_dir_path = block_on(get_maps_dir_path(&sqlite_pool)).unwrap();
+
+    let file_list = MusicFile::new(match get_dir_path.get(0) {
+        Some(path) => path.path.clone(),
+        None => String::from(""),
+    });
     println!("file_list : {:?}", file_list);
 
-     let songs = block_on(file_list.get_song_data(&sqlite_pool));
-     songs
+    let songs = block_on(file_list.get_song_data(&sqlite_pool));
+    songs
 }
 
 fn path_to_string(paths: Vec<PathBuf>) -> Vec<String> {
@@ -440,6 +446,3 @@ mod tests {
     //     assert_eq!(music_data.first().unwrap(), &song);
     // }
 }
-
-
-
