@@ -206,7 +206,6 @@ impl MusicFile {
 
         for only_in_file in only_in_files.iter() {
             let path = PathBuf::from(only_in_file);
-            let files_paths = fs::read_dir(path.clone()).unwrap();
             match self.get_info_dat(path.clone()) {
                 Ok(info_dat) => {
                     let _musicfile_file_path = self.db_check_and_get_song_data(path.clone());
