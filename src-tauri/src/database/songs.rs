@@ -19,7 +19,7 @@ pub async fn get_songs_by_music_dir(music_dir: String) -> Result<SongData, sqlx:
     Ok(data)
 }
 pub async fn get_all_song(pool: &SqlitePool) -> Result<Vec<SongData>, sqlx::Error> {
-    let mut tx: SqliteConnection = SqliteConnection::connect(&get_database_url()).await?;
+    let _tx: SqliteConnection = SqliteConnection::connect(&get_database_url()).await?;
 
     let data = sqlx::query_as::<Sqlite, SongData>("SELECT * FROM songs")
         .fetch_all(pool)
@@ -33,14 +33,17 @@ pub async fn get_all_song(pool: &SqlitePool) -> Result<Vec<SongData>, sqlx::Erro
 pub struct SongDataMapDirOnly {
     pub music_dir: String,
 }
-pub async fn get_all_song_map_dir(
-    pool: &SqlitePool,
-) -> Result<Vec<SongDataMapDirOnly>, sqlx::Error> {
+pub async fn get_all_song_map_dir(pool: &SqlitePool) -> Result<Vec<String>, sqlx::Error> {
     let data = sqlx::query_as::<Sqlite, SongDataMapDirOnly>("SELECT music_dir  FROM songs; ")
         .fetch_all(pool)
         .await?;
+    // Vec<SongDataMapDirOnly> を Vec<String> に変換する
+    let mut music_dir_list: Vec<String> = Vec::new();
+    for song in data {
+        music_dir_list.push(song.music_dir);
+    }
 
-    Ok(data)
+    Ok(music_dir_list)
 }
 
 pub async fn add_song(data: SongData) -> DbResult<()> {
