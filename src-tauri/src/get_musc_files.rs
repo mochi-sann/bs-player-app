@@ -135,7 +135,7 @@ impl MusicFile {
     }
 
     async fn db_check_and_get_song_data(&self, path: PathBuf, pool: &SqlitePool) -> SongData {
-        let db_song_data = get_songs_by_music_dir(path.to_str().unwrap().to_string()).await;
+        let db_song_data = get_songs_by_music_dir(path.to_str().unwrap().to_string(), pool).await;
         match db_song_data {
             Ok(song_data) => {
                 info!("song_data : {:?}", song_data);
@@ -202,10 +202,13 @@ impl MusicFile {
     async fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
         println!("get_song_datas : ");
         let paths = self.get_music_dirs();
+        println!("paths : {:?}", paths);
         let music_file_lis_db = self.get_all_song_map_dir(pool).await;
+        println!("music_file_lis_db : {:?}", music_file_lis_db);
         let paths_string = path_to_string(paths.clone());
-        let (only_in_files, _only_in_db) = unique_elements(paths_string, music_file_lis_db);
+        let (only_in_files, only_in_db) = unique_elements(paths_string, music_file_lis_db);
         println!("only_in_files : {:?}", only_in_files);
+        println!("_only_ind_db : {:?}", only_in_db);
 
         for only_in_file in only_in_files.iter() {
             let path = PathBuf::from(only_in_file);
@@ -280,6 +283,28 @@ mod tests {
     struct TestStruc {
         a: i32,
         text: String,
+    }
+
+    #[tokio::test]
+    async fn musics_len() {
+        let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
+        migrate_database(&pool).await.unwrap();
+
+        // src-tauri\test\assets\maps\01 への絶対パスを取得する
+
+        let dir_path = String::from("./test/assets/maps");
+
+        let absolute_path = fs::canonicalize(dir_path).unwrap();
+
+        let dir_path_full = String::from(absolute_path.to_str().unwrap());
+
+        let file_list = MusicFile::new(dir_path_full.clone());
+        println!("file_list : {:?}", file_list);
+
+        let songs = file_list.get_song_data(&pool).await;
+
+        println!("songs : {:?}", songs);
+        assert_eq!(songs.len(), 1);
     }
 
     #[test]
@@ -398,20 +423,6 @@ mod tests {
         ];
 
         assert_eq!(path_to_string(paths), expected);
-    }
-    #[tokio::test]
-    async fn musics_len() {
-        let pool = create_sqlite_pool("sqlite::memory:").await.unwrap();
-        migrate_database(&pool).await.unwrap();
-        // src-tauri\test\assets\maps\01 への絶対パスを取得する
-        let dir_path = String::from("./test/assets/maps");
-
-        let absolute_path = fs::canonicalize(dir_path).unwrap();
-
-        let dir_path = String::from(absolute_path.to_str().unwrap());
-        let music_file = MusicFile::new(dir_path);
-        let music_data = music_file.get_song_data(&pool);
-        assert_eq!(music_data.await.len(), 1);
     }
     // fn musics_data() {
     //     // src-tauri\test\assets\maps\01 への絶対パスを取得する
