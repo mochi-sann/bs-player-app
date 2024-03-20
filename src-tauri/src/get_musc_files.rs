@@ -316,7 +316,7 @@ mod tests {
 
         // src-tauri\test\assets\maps\01 への絶対パスを取得する
 
-        let dir_path = String::from("./test/assets/maps");
+        let dir_path = String::from("./test/assets/one_map");
 
         let absolute_path = fs::canonicalize(dir_path).unwrap();
 
