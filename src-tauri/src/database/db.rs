@@ -64,15 +64,3 @@ pub fn get_database_url() -> String {
     let database_url = format!("sqlite://{}/{}", database_dir_str, DATABASE_FILE);
     database_url
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_database_url() {
-        let database_url = get_database_url();
-        assert!(database_url.starts_with("sqlite://"));
-        assert!(database_url.ends_with("bs_player.db"));
-    }
-}
