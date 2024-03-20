@@ -39,10 +39,10 @@ jobs:
       - name: Disable git core.autocrlf on Windows
         if: matrix.os == 'windows-latest'
         run: git config --global core.autocrlf false
-      - uses: ./.github/actions/cache_cargo
 
       - name: Checkout repository code
         uses: actions/checkout@v3
+      - uses: ./.github/actions/cache_cargo
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
