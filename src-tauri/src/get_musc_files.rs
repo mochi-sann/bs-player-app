@@ -366,9 +366,9 @@ mod tests {
         let file_list = MusicFile::new(dir_path_full.clone());
         let paths = file_list.get_music_dirs();
         let new_dirs = vec![
-            PathBuf::from(absolute_path.join("01")),
-            PathBuf::from(absolute_path.join("02")),
-            PathBuf::from(absolute_path.join("03")),
+            absolute_path.join("01"),
+            absolute_path.join("02"),
+            absolute_path.join("03"),
         ];
         assert_eq!(paths, new_dirs);
     }
@@ -387,8 +387,8 @@ mod tests {
 
         let file_list = MusicFile::new(dir_path_full.clone());
 
-        let paths = file_list.get_info_dat(PathBuf::from(absolute_path.join("01")));
-        assert_eq!(paths.is_ok(), true);
+        let paths = file_list.get_info_dat(absolute_path.join("01"));
+        assert!(paths.is_ok());
         assert_eq!(paths.unwrap()["_songName"], "sample_song".to_string());
     }
     #[tokio::test]
@@ -406,9 +406,9 @@ mod tests {
 
         let file_list = MusicFile::new(dir_path_full.clone());
         let durication = file_list
-            .get_bs_music_durication(PathBuf::from(absolute_path.join("01").join("song.egg")));
+            .get_bs_music_durication(absolute_path.join("01").join("song.egg"));
 
-        assert_eq!(durication.is_ok(), true);
+        assert!(durication.is_ok());
         assert_eq!(durication.unwrap(), Duration::new(1, 451000000));
     }
     #[tokio::test]
@@ -427,7 +427,7 @@ mod tests {
         let file_list = MusicFile::new(dir_path_full.clone());
 
         let file_lists = file_list
-            .db_check_and_get_song_data(PathBuf::from(absolute_path.join("01")), &pool)
+            .db_check_and_get_song_data(absolute_path.join("01"), &pool)
             .await;
         assert_eq!(file_lists.id, 0);
         assert_eq!(file_lists.auther, "auther name".to_string());
@@ -449,10 +449,10 @@ mod tests {
         let file_list = MusicFile::new(dir_path_full.clone());
 
         let _file_lists = file_list
-            .db_check_and_get_song_data(PathBuf::from(absolute_path.join("01")), &pool)
+            .db_check_and_get_song_data(absolute_path.join("01"), &pool)
             .await;
         let file_lists = file_list
-            .db_check_and_get_song_data(PathBuf::from(absolute_path.join("01")), &pool)
+            .db_check_and_get_song_data(absolute_path.join("01"), &pool)
             .await;
         assert_eq!(file_lists.auther, "auther name".to_string());
         assert_eq!(file_lists.mapper, "mapper name".to_string());
@@ -474,7 +474,7 @@ mod tests {
         let file_list = MusicFile::new(dir_path_full.clone());
 
         let _file_lists = file_list
-            .db_check_and_get_song_data(PathBuf::from(absolute_path.join("01")), &pool)
+            .db_check_and_get_song_data(absolute_path.join("01"), &pool)
             .await;
         let file_lists = file_list.get_all_song_map_dir(&pool).await;
         assert_eq!(
