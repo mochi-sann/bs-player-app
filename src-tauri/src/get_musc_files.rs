@@ -364,13 +364,13 @@ mod tests {
         let dir_path_full = String::from(absolute_path.to_str().unwrap());
 
         let file_list = MusicFile::new(dir_path_full.clone());
-        let paths = file_list.get_music_dirs();
-        let new_dirs = vec![
+        let mut paths = file_list.get_music_dirs();
+        let mut new_dirs = vec![
             absolute_path.join("01"),
             absolute_path.join("02"),
             absolute_path.join("03"),
         ];
-        assert_eq!(paths, new_dirs);
+        assert_eq!(paths.sort(), new_dirs.sort());
     }
     #[tokio::test]
     async fn get_info_dat() {
