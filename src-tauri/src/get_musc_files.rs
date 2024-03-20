@@ -405,8 +405,8 @@ mod tests {
         let dir_path_full = String::from(absolute_path.to_str().unwrap());
 
         let file_list = MusicFile::new(dir_path_full.clone());
-        let durication = file_list
-            .get_bs_music_durication(absolute_path.join("01").join("song.egg"));
+        let durication =
+            file_list.get_bs_music_durication(absolute_path.join("01").join("song.egg"));
 
         assert!(durication.is_ok());
         assert_eq!(durication.unwrap(), Duration::new(1, 451000000));
