@@ -27,23 +27,7 @@ env:
   RUSTFLAGS: "-Dwarnings"
 
 jobs:
-  build_cache:
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    env:
-      RUSTC_FORCE_INCREMENTAL: 1
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/cache_cargo
-      - name: build
-        run: cargo build
-        working-directory: src-tauri
-
   build:
-    needs: build_cache
-
     strategy:
       fail-fast: false
       matrix:
@@ -55,6 +39,7 @@ jobs:
       - name: Disable git core.autocrlf on Windows
         if: matrix.os == 'windows-latest'
         run: git config --global core.autocrlf false
+      - uses: ./.github/actions/cache_cargo
 
       - name: Checkout repository code
         uses: actions/checkout@v3
