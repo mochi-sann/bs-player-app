@@ -42,6 +42,7 @@ jobs:
 
       - name: Checkout repository code
         uses: actions/checkout@v3
+      - uses: ./.github/actions/cache_cargo
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
