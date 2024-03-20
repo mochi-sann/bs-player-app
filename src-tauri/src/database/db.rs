@@ -69,8 +69,6 @@ pub fn get_database_url() -> String {
 mod tests {
     use super::*;
 
-
-
     #[test]
     fn test_get_database_url() {
         let database_url = get_database_url();
