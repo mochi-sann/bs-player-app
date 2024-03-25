@@ -1,13 +1,11 @@
-import { Suspense, lazy } from "react";
 import "./App.css";
 import { I18nProvider } from "./Components/Provider/I18n";
-import { RequireMapPath } from "./Components/features/RequireMapPath";
 import { Layout } from "./Components/views/Layout";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-
-const MainPage = lazy(() => import("./routes/MainPage"));
-const SetUpPage = lazy(() => import("./routes/SetUpPage"));
-const SettingPage = lazy(() => import("./routes/SettingPage"));
+import { Loading } from "./Components/views/Loading";
+import MainPage from "./routes/MainPage";
+import SetUpPage from "./routes/SetUpPage";
+import SettingPage from "./routes/SettingPage";
+import { Link, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 function NoMatch() {
   return (
@@ -20,50 +18,36 @@ function NoMatch() {
   );
 }
 
+const routers = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <MainPage />,
+      },
+      {
+        path: "setup",
+        // Single route in lazy file
+        element: <SetUpPage />,
+      },
+      {
+        path: "settings",
+        // Single route in lazy file
+        element: <SettingPage />,
+      },
+      {
+        path: "*",
+        element: <NoMatch />,
+      },
+    ],
+  },
+]);
 function App() {
   return (
     <I18nProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              index
-              element={
-                <Suspense fallback={<>...</>}>
-                  <RequireMapPath>
-                    <MainPage />
-                  </RequireMapPath>
-                </Suspense>
-              }
-            />
-            <Route
-              path="setup"
-              element={
-                <Suspense fallback={<>...</>}>
-                  <SetUpPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <Suspense fallback={<>...</>}>
-                  <SettingPage />
-                </Suspense>
-              }
-            />
-
-            <Route
-              path="*"
-              element={
-                <Suspense>
-                  <NoMatch />
-                </Suspense>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={routers} fallbackElement={<Loading />} />
     </I18nProvider>
   );
 }
