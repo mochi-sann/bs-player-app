@@ -3,7 +3,7 @@ import { MusicPlayer } from "@/Components/features/MusicPlayer";
 import { Center } from "@/Components/ui/center";
 import { Loading } from "@/Components/views/Loading";
 
-export const MainPage = () => {
+export const Component = () => {
   return (
     <>
       <div className="container">
@@ -20,4 +20,4 @@ export const MainPage = () => {
     </>
   );
 };
-export default MainPage;
+Component.displayName = "MainPage";

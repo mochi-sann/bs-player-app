@@ -2,9 +2,6 @@ import "./App.css";
 import { I18nProvider } from "./Components/Provider/I18n";
 import { Layout } from "./Components/views/Layout";
 import { Loading } from "./Components/views/Loading";
-import MainPage from "./routes/MainPage";
-import SetUpPage from "./routes/SetUpPage";
-import SettingPage from "./routes/SettingPage";
 import { Link, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 function NoMatch() {
@@ -25,17 +22,17 @@ const routers = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <MainPage />,
+        lazy: () => import("./routes/MainPage"),
       },
       {
         path: "setup",
         // Single route in lazy file
-        element: <SetUpPage />,
+        lazy: () => import("./routes/SetUpPage"),
       },
       {
         path: "settings",
         // Single route in lazy file
-        element: <SettingPage />,
+        lazy: () => import("./routes/SettingPage"),
       },
       {
         path: "*",

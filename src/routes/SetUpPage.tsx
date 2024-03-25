@@ -3,7 +3,7 @@ import { Setup } from "@/Components/pages/Setup";
 import { Center } from "@/Components/ui/center";
 import { Loading } from "@/Components/views/Loading";
 
-export const SetUpPage = () => {
+export const Component = () => {
   return (
     <>
       <div className="container">
@@ -20,4 +20,4 @@ export const SetUpPage = () => {
     </>
   );
 };
-export default SetUpPage;
+Component.displayName = "SetUpPage";

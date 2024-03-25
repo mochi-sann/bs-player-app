@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { Loading } from "../Loading";
 import { NavBar } from "../NavBar";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { Outlet } from "react-router-dom";
@@ -13,7 +15,15 @@ export const Layout = () => {
             scrollbars: { autoHide: "never", theme: " os-theme-light" },
           }}
         >
-          <Outlet />
+          <Suspense
+            fallback={
+              <div>
+                <Loading />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </OverlayScrollbarsComponent>
       </div>
     </div>

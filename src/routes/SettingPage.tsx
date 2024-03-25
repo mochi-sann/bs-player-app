@@ -1,6 +1,6 @@
 import { Setting } from "@/Components/pages/Setting";
 
-export const SettingPage = () => {
+export const Component = () => {
   return (
     <div>
       <div className="container">
@@ -9,4 +9,4 @@ export const SettingPage = () => {
     </div>
   );
 };
-export default SettingPage;
+Component.displayName = "SettingPage";
