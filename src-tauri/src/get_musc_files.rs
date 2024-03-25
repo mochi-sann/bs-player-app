@@ -200,15 +200,10 @@ impl MusicFile {
     }
 
     async fn get_song_data(&self, pool: &SqlitePool) -> Vec<SongData> {
-        println!("get_song_datas self : {}", self.dir_path);
         let paths = self.get_music_dirs();
-        println!("paths : {:?}", paths);
         let music_file_lis_db = self.get_all_song_map_dir(pool).await;
-        println!("music_file_lis_db : {:?}", music_file_lis_db);
         let paths_string = path_to_string(paths.clone());
-        let (only_in_files, only_in_db) = unique_elements(paths_string, music_file_lis_db);
-        println!("only_in_files : {:?}", only_in_files);
-        println!("_only_ind_db : {:?}", only_in_db);
+        let (only_in_files, _only_in_db) = unique_elements(paths_string, music_file_lis_db);
 
         for only_in_file in only_in_files.iter() {
             let path = PathBuf::from(only_in_file);
@@ -230,9 +225,8 @@ impl MusicFile {
 
         let file_list: Vec<SongData> = match get_all_song(pool).await {
             Ok(result) => result,
-            Err(err) => {
+            Err(_err) => {
                 // Handle the error here, e.g. print an error message or return an empty vector
-                println!("Error: {:?}", err);
                 Vec::new()
             }
         };
@@ -248,7 +242,6 @@ pub fn get_bs_music_files(sqlite_pool: State<'_, SqlitePool>) -> Vec<SongData> {
         Some(path) => path.path.clone(),
         None => String::from(""),
     });
-    println!("file_list : {:?}", file_list);
 
     let songs = block_on(file_list.get_song_data(&sqlite_pool));
     songs

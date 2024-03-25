@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, str::FromStr};
+use std::{collections::BTreeMap, path::PathBuf, str::FromStr};
 
 use futures::TryStreamExt;
 use sqlx::{
@@ -52,10 +52,13 @@ pub(crate) async fn _get_all_songs(pool: &SqlitePool) -> DbResult<Vec<BTreeMap<S
 
     Ok(songs)
 }
+pub fn get_confg_root() -> PathBuf {
+    let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
+    app_data_dir.join(DATABASE_DIR)
+}
 
 pub fn get_database_url() -> String {
-    let app_data_dir = app_local_data_dir(&Config::default()).unwrap();
-    let database_dir = app_data_dir.join(DATABASE_DIR);
+    let database_dir = get_confg_root();
     let _database_file = database_dir.join(DATABASE_FILE);
     let database_dir_str = dunce::canonicalize(&database_dir)
         .unwrap()
