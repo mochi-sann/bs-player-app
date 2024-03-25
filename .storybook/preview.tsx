@@ -7,6 +7,7 @@ import "../src/styles.css";
 import { withThemeByClassName } from "@storybook/addon-themes";
 // theme.ts file from previous step
 import type { Preview } from "@storybook/react";
+import "overlayscrollbars/overlayscrollbars.css";
 
 // theme.ts file from previous step
 export const decorators = [

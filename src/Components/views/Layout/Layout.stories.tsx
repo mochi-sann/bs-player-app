@@ -27,3 +27,22 @@ export const Main: Story = {
     },
   },
 };
+
+export const ScroolBar: Story = {
+  args: {
+    children: (
+      <div style={{ height: "5000px" }}>
+        {" "}
+        <p>hoge</p>
+      </div>
+    ),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        component: `コンポーネントの説明マークダウン。`,
+      },
+    },
+  },
+};

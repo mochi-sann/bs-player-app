@@ -3,6 +3,7 @@ import App from "./App";
 import { ThemeProvider } from "./Components/ui/theme-provider";
 import "./styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "overlayscrollbars/overlayscrollbars.css";
 import ReactDOM from "react-dom/client";
 
 const queryClient = new QueryClient();
