@@ -56,6 +56,12 @@ dependencies:
   match-sorter:
     specifier: ^6.3.4
     version: 6.3.4
+  overlayscrollbars:
+    specifier: ^2.6.1
+    version: 2.6.1
+  overlayscrollbars-react:
+    specifier: ^0.5.4
+    version: 0.5.4(overlayscrollbars@2.6.1)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -136,6 +142,9 @@ devDependencies:
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.3.0
     version: 4.3.0(prettier@3.2.5)
+  '@types/overlayscrollbars':
+    specifier: ^1.12.5
+    version: 1.12.5
   '@types/react':
     specifier: ^18.2.15
     version: 18.2.59
@@ -4440,6 +4449,10 @@ packages:
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
+    dev: true
+
+  /@types/overlayscrollbars@1.12.5:
+    resolution: {integrity: sha512-1yMmgFrq1DQ3sCHyb3DNfXnE0dB463MjG47ugX3cyade3sOt3U8Fjxk/Com0JJguTLPtw766TSDaO4NC65Wgkw==}
     dev: true
 
   /@types/parse-json@4.0.2:
@@ -8888,6 +8901,20 @@ packages:
   /os-tmpdir@1.0.2:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /overlayscrollbars-react@0.5.4(overlayscrollbars@2.6.1)(react@18.2.0):
+    resolution: {integrity: sha512-FPKx9XnXovTnI4+2JXig5uEaTLSEJ6svOwPzIfBBXTHBRNsz2+WhYUmfM0K/BNYxjgDEwuPm+NQhEoOA0RoG1g==}
+    peerDependencies:
+      overlayscrollbars: ^2.0.0
+      react: '>=16.8.0'
+    dependencies:
+      overlayscrollbars: 2.6.1
+      react: 18.2.0
+    dev: false
+
+  /overlayscrollbars@2.6.1:
+    resolution: {integrity: sha512-V+ZAqWMYMyGBJNRDEcdRC7Ch+WT9RBx9hY8bfJSMyFObQeJoecs1Vqg7ZAzBVcpN6sCUXFAZldCbeySwmmD0RA==}
     dev: false
 
   /p-cancelable@3.0.0:
