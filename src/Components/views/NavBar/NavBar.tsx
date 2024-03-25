@@ -1,6 +1,8 @@
 import LogoImage from "../../../assets/icon.png";
+import { Button } from "@/Components/ui/button";
 import { appWindow } from "@tauri-apps/api/window";
 import { Maximize, Minus, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const NavBar = () => {
   function minimize() {
@@ -30,6 +32,12 @@ export const NavBar = () => {
         <div className=" inline-flex items-center gap-2 px-5">
           <img src={LogoImage} alt="logo" className="h-4 w-4" />
           <p className="text-center font-bold">BS Player</p>
+        </div>
+        <div>
+          <Link to="/settings" className="text-white">
+            <a className="hover:underline">settings</a>
+          </Link>
+          <Button variant={"default"}>settings</Button>
         </div>
         <ul className="flex gap-x-1">
           <li>

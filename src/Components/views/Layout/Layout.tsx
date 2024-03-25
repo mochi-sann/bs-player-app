@@ -1,11 +1,8 @@
 import { NavBar } from "../NavBar";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { Outlet } from "react-router-dom";
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
-export const Layout = (props: LayoutProps) => {
+export const Layout = () => {
   return (
     <div>
       <NavBar />
@@ -16,7 +13,7 @@ export const Layout = (props: LayoutProps) => {
             scrollbars: { autoHide: "never", theme: " os-theme-light" },
           }}
         >
-          {props.children}
+          <Outlet />
         </OverlayScrollbarsComponent>
       </div>
     </div>
