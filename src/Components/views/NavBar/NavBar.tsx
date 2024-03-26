@@ -1,7 +1,7 @@
 import LogoImage from "../../../assets/icon.png";
 import { Button } from "@/Components/ui/button";
 import { appWindow } from "@tauri-apps/api/window";
-import { Maximize, Minus, X } from "lucide-react";
+import { Maximize, Minus, Settings, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const NavBar = () => {
@@ -33,13 +33,14 @@ export const NavBar = () => {
           <img src={LogoImage} alt="logo" className="h-4 w-4" />
           <p className="text-center font-bold">BS Player</p>
         </div>
-        <div>
-          <Link to="/settings" className="text-white">
-            <a className="hover:underline">settings</a>
-          </Link>
-          <Button variant={"default"}>settings</Button>
-        </div>
         <ul className="flex gap-x-1">
+          <li className="flex items-center">
+            <Link to="/settings" className="text-white">
+              <Button variant={"ghost"} size={"icon"}>
+                <Settings className="h- w-" size={"17"} />
+              </Button>
+            </Link>
+          </li>
           <li>
             <button onClick={minimize} className="window-control-button">
               <Minus size="16" />
@@ -63,3 +64,5 @@ export const NavBar = () => {
     </header>
   );
 };
+
+NavBar.displayName = "NavBar";
