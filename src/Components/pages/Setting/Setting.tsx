@@ -5,14 +5,18 @@ import {
   SelectItem,
   SelectValue,
 } from "@/Components/ui/select";
+import { useI18nContext } from "@/i18n/i18n-react";
+import type { Locales } from "@/i18n/i18n-types";
+import { locales } from "@/i18n/i18n-util";
+import { loadLocaleAsync } from "@/i18n/i18n-util.async";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { invoke } from "@tauri-apps/api";
 import { Link } from "react-router-dom";
 
-const languageSets = [
-  { value: "en", name: "Engilish" },
-  { value: "ja", name: "日本語" },
-];
+// const languageSets = [
+//   { value: "en", name: "英語" },
+//   { value: "ja", name: "日本語" },
+// ];
 
 const themeSets = [
   { value: "dark", name: "Dark" },
@@ -21,6 +25,9 @@ const themeSets = [
 ];
 
 export const Setting = () => {
+  const { locale, LL, setLocale } = useI18nContext();
+  const languageSets = locale;
+
   const [languageSelected, setLanguageSelected] = useState("en");
   const [themeSelected, setThemeSelected] = useState("dark");
 
@@ -33,14 +40,21 @@ export const Setting = () => {
 
   const onLanguageChanged = async (lang: string) => {
     await invoke("set_language", { newLanguage: lang });
+    onLocaleSelected(lang as Locales);
   };
 
   const onThemeChanged = async () => {
     await invoke("set_theme", { newTheme: themeSelected });
   };
+  const onLocaleSelected = async (value: Locales) => {
+    const locale = value;
+    localStorage.setItem("lang", locale);
+    await loadLocaleAsync(locale);
+    setLocale(locale);
+  };
 
   return (
-    <div className="container max-w-md">
+    <div className="container max-w-lg">
       <Link to="/" className="text-white">
         back to /
       </Link>{" "}
@@ -49,17 +63,19 @@ export const Setting = () => {
         <ul className="m-3 divide-y-2">
           <li className="flex justify-between py-3">
             <div className="flex flex-col">
-              <p className="font-semibold">Language</p>
-              <p className="text-gray-400">Language settings</p>
+              <p className="font-semibold">{LL.langs.langage()}</p>
+              <label className="text-gray-400">
+                {LL.langs.CHOOSE_LOCALE()}
+              </label>
             </div>
             <Select onValueChange={(value) => onLanguageChanged(value)}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={languageSets[0].name} />
+                <SelectValue placeholder={LL.langs.CHOOSE_LOCALE()} />
               </SelectTrigger>
               <SelectContent>
-                {languageSets.map((theme) => (
-                  <SelectItem key={theme.value} value={theme.value}>
-                    {theme.name}
+                {locales.map((theme) => (
+                  <SelectItem key={theme} value={theme}>
+                    {theme}
                   </SelectItem>
                 ))}
               </SelectContent>

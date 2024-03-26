@@ -28,18 +28,24 @@ type RootTranslation = {
 		 */
 		'Select Beat Saber Maps Folder': string
 	}
+	langs: {
+		/**
+		 * E​n​g​l​i​s​h
+		 */
+		SELECTED_LOCALE: string
+		/**
+		 * C​h​o​o​s​e​ ​a​ ​l​a​n​g​u​a​g​e
+		 */
+		CHOOSE_LOCALE: string
+		/**
+		 * L​a​n​g​u​a​g​e
+		 */
+		langage: string
+	}
 	/**
 	 * B​S​ ​p​l​a​y​e​r​ ​a​p​p
 	 */
 	appName: string
-	/**
-	 * E​n​g​l​i​s​h
-	 */
-	SELECTED_LOCALE: string
-	/**
-	 * C​h​o​o​s​e​ ​a​ ​l​a​n​g​u​a​g​e
-	 */
-	CHOOSE_LOCALE: string
 	/**
 	 * H​i​ ​{​n​a​m​e​}​!
 	 * @param {unknown} name
@@ -70,18 +76,24 @@ export type TranslationFunctions = {
 		 */
 		'Select Beat Saber Maps Folder': () => LocalizedString
 	}
+	langs: {
+		/**
+		 * English
+		 */
+		SELECTED_LOCALE: () => LocalizedString
+		/**
+		 * Choose a language
+		 */
+		CHOOSE_LOCALE: () => LocalizedString
+		/**
+		 * Language
+		 */
+		langage: () => LocalizedString
+	}
 	/**
 	 * BS player app
 	 */
 	appName: () => LocalizedString
-	/**
-	 * English
-	 */
-	SELECTED_LOCALE: () => LocalizedString
-	/**
-	 * Choose a language
-	 */
-	CHOOSE_LOCALE: () => LocalizedString
 	/**
 	 * Hi {name}!
 	 */
