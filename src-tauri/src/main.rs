@@ -107,6 +107,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             handle_get_bs_maps,
             handle_set_bs_maps_path,
             folder_exists
+            ,config::commands::set_language
+            , config::commands::set_theme
+            , config::commands::get_settings
         ])
         .plugin(
             tauri_plugin_log::Builder::default()
