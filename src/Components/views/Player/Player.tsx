@@ -32,9 +32,9 @@ export const Player = (props: PlayerProps) => {
     console.log("mouse up");
   };
   return (
-    <div className="h-[97px]">
+    <div className="">
       {createPortal(
-        <div className="absolute bottom-0 left-0 flex w-full gap-4 rounded-t-lg border bg-card/90 px-8 py-4 backdrop-blur">
+        <div className=" bottom-0 left-0 flex w-full gap-4  border-t bg-card/90 px-8 py-4 backdrop-blur">
           <PlayerContetWrapper>
             <div className="flex h-full justify-start">
               {props.SongData && (

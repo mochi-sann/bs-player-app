@@ -75,8 +75,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let sqlite_pool = block_on(create_sqlite_pool(&database_url))?;
     let settings = Settings::default();
     println!("{:?}", settings);
-       let app_state = config::AppState::new();
-
+    let app_state = config::AppState::new();
 
     //  データベースファイルが存在しなかったなら、マイグレーションSQLを実行する
     block_on(migrate_database(&sqlite_pool))?;
@@ -106,10 +105,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             get_bs_music_files,
             handle_get_bs_maps,
             handle_set_bs_maps_path,
-            folder_exists
-            ,config::commands::set_language
-            , config::commands::set_theme
-            , config::commands::get_settings
+            folder_exists,
+            config::commands::set_language,
+            config::commands::set_theme,
+            config::commands::get_settings
         ])
         .plugin(
             tauri_plugin_log::Builder::default()

@@ -10,18 +10,12 @@ export const Layout = () => {
       <NavBar />
       <div className="">
         <OverlayScrollbarsComponent
-          className="h-[calc(100vh-3rem)] w-full overflow-auto"
+          className="h-[calc(100vh-3rem-98px)] w-full overflow-auto"
           options={{
             scrollbars: { autoHide: "never", theme: " os-theme-light" },
           }}
         >
-          <Suspense
-            fallback={
-              <div>
-                <Loading />
-              </div>
-            }
-          >
+          <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>
         </OverlayScrollbarsComponent>

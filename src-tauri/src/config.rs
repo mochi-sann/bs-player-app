@@ -2,10 +2,12 @@ use std::{fmt, fs, mem, sync::Mutex};
 
 use serde::{Deserialize, Serialize};
 use std::io::Write;
+use ts_rs::TS;
 
 use crate::database::db::get_confg_root;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, TS)]
+#[ts(export)]
 pub struct Settings {
     language: String,
     theme: String,
@@ -115,11 +117,8 @@ pub mod commands {
         Ok(())
     }
     #[tauri::command]
-    pub async fn get_settings(
-        state: tauri::State<'_, AppState>
-    )-> Result<Settings, String> {
+    pub async fn get_settings(state: tauri::State<'_, AppState>) -> Result<Settings, String> {
         let settings = state.settings.lock().unwrap().clone();
         Ok(settings)
     }
-
 }

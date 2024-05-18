@@ -27,6 +27,10 @@ type RootTranslation = {
 		 * S​e​l​e​c​t​ ​B​e​a​t​ ​S​a​b​e​r​ ​M​a​p​s​ ​F​o​l​d​e​r
 		 */
 		'Select Beat Saber Maps Folder': string
+		/**
+		 * B​a​c​k​ ​t​o​ ​m​a​i​n​ ​p​a​g​e
+		 */
+		backMainPage: string
 	}
 	langs: {
 		/**
@@ -75,6 +79,10 @@ export type TranslationFunctions = {
 		 * Select Beat Saber Maps Folder
 		 */
 		'Select Beat Saber Maps Folder': () => LocalizedString
+		/**
+		 * Back to main page
+		 */
+		backMainPage: () => LocalizedString
 	}
 	langs: {
 		/**

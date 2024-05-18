@@ -5,6 +5,7 @@ import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { atom } from "jotai";
 import { atomWithSuspenseQuery } from "jotai-tanstack-query";
 import { atomWithStorage } from "jotai/utils";
+import { Settings } from "src-tauri/bindings/Settings";
 
 export const MusicFileListAtom = atom<SongDataType[]>([]);
 
@@ -32,3 +33,12 @@ export const MapPathAtomAsync = atomWithSuspenseQuery(() => ({
 }));
 
 export const VolmeAtom = atomWithStorage("AudioVolme", 0);
+
+export const AppConfigAtomAsync = atomWithSuspenseQuery(() => ({
+  queryKey: ["AppConfigAtomAsync"],
+  // eslint-disable-next-line no-empty-pattern
+  queryFn: async ({ queryKey: [] }) => {
+    const settings: Settings = await invoke("get_settings");
+    return settings;
+  },
+}));
